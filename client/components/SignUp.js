@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 
 import validateEmail from '../utils/validateEmail';
-
 console.log(validateEmail, "validateEmail SignUp");
 
 class SignUp extends Component {
@@ -12,7 +11,8 @@ class SignUp extends Component {
       email: "",
       password: "",
       confirmPassword: ""
-    }
+    },
+    error: ""
   }
 
   handleChange = (e) => {
@@ -47,7 +47,8 @@ class SignUp extends Component {
           },
           body: JSON.stringify(this.state.user)
         })
-        .then((res) => {
+        .then(res => res.json())
+        .then(res => {
           console.log(res, "login data");
           if(res.data.success){
             localStorage.setItem("jwt", res.data.token);
@@ -72,6 +73,7 @@ class SignUp extends Component {
   render() {
     return (
       <form>
+        <p className={ error }>{ error }</p>
         <input
           type="text"
           name="userName"
@@ -108,4 +110,9 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+function mapStateToProps(state){
+  console.log(state, "login mapStateToProps");
+  return { state }
+}
+
+export default connect(mapStateToProps)(SignUp);
