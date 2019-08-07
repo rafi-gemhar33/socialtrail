@@ -1,24 +1,26 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var helmet = require('helmet');
-var expressStaticGzip = require("express-static-gzip");
-var mongoose = require('mongoose');
+require('dotenv').config()
 
-var indexRouter = require('./routes/index');
-var apiRouter = require('./routes/api')
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const helmet = require('helmet');
+const expressStaticGzip = require('express-static-gzip');
+const mongoose = require('mongoose');
 
-var app = express();
+const indexRouter = require('./server/routes/index');
+const apiRouter = require('./server/routes/api')
+
+const app = express();
 
 app.use(helmet());
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '/server/views'));
 app.set('view engine', 'ejs');
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   app.use(logger('dev'));
 }
 
@@ -34,7 +36,7 @@ app.use('/dist/bundle', expressStaticGzip(path.join(__dirname, 'dist/bundle'), {
   enableBrotli: true,
   orderPreference: ['br', 'gz'],
   setHeaders: function (res, path) {
-    res.setHeader("Cache-Control", "public, max-age=31536000");
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
   }
 }));
 
@@ -48,19 +50,19 @@ mongoose.connect('mongodb://localhost:27017/social-Tracker', function (err) {
 });
 
 // webpack
-if (process.env.NODE_ENV === "development") {
-  var webpack = require("webpack");
-  var webpackConfig = require("./webpack.config");
-  var compiler = webpack(webpackConfig);
+if (process.env.NODE_ENV === 'development') {
+  const webpack = require('webpack');
+  const webpackConfig = require('./webpack.config');
+  const compiler = webpack(webpackConfig);
 
   app.use(
-    require("webpack-dev-middleware")(compiler, {
+    require('webpack-dev-middleware')(compiler, {
       noInfo: true,
       publicPath: webpackConfig.output.publicPath
     })
   );
 
-  app.use(require("webpack-hot-middleware")(compiler));
+  app.use(require('webpack-hot-middleware')(compiler));
 }
 
 // Route handler
