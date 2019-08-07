@@ -7,7 +7,8 @@ class Login extends Component {
     user: {
       email: "",
       password: ""
-    }
+    },
+    error: ""
   }
 
   handleChange = (e) => {
@@ -25,9 +26,14 @@ class Login extends Component {
     const { email, password } = this.state.user;
     if(email && password){
       fetch.post('http://localhost:3000/api/v1/users/login',{
-        
+        method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.state.user)
       })
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         console.log(res, "login data");
         if(res.data.success){
           localStorage.setItem("jwt", res.data.token);
@@ -41,12 +47,16 @@ class Login extends Component {
         this.setState({ error: "Wrong email address" });
         setTimeout(() => this.setState({ error: "" }), 1000);
       });
+    } else {
+      this.setState({ error: "Please fill all the feilds" });
     }
   }
 
   render() {
+    const { error } = this.state;
     return (
       <form>
+        <p className={ error }>{ error }</p>
         <input
           type="text"
           name="email"
@@ -69,5 +79,9 @@ class Login extends Component {
   }
 }
 
+function mapStateToProps(state){
+  console.log(state, "login mapStateToProps");
+  return { state }
+}
 
-export default Login;
+export default connect(mapStateToProps)(Login);
