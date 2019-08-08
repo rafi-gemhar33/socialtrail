@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import validateEmail from '../utils/validateEmail';
 const url = "http://localhost:3000/api/v1/"
-// console.log(validateEmail, "validateEmail check...");
 
 class SignUp extends Component {
   state = {
@@ -52,11 +51,11 @@ class SignUp extends Component {
         .then(res => res.json())
         .then(res => {
           console.log(res, "signup data");
-          if(res.data.success){
-            // localStorage.setItem("jwt", res.data.token);
-            // this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
-            // this.setState({ user: {} });
-            // this.props.history.push('/');
+          if(res.success){
+            // localStorage.setItem("jwt", res.token);
+            this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res});
+            this.setState({ user: {} });
+            this.props.history.push('/');
           }
         })
         .catch(function (err) {

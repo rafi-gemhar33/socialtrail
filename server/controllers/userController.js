@@ -12,6 +12,17 @@ module.exports = {
 	
 	},
 
+	verifyToken: (req,res) => {
+		console.log(req.body);
+		User.findOne({ _id: req.user.id }, (err, user) => {
+			if(err){
+				return res.status(500).json({ error: err, success: false, massege: "Server error" });
+			} else if(user){ 
+				return res.status(200).json({ success: true, user });
+			}
+		})
+	},
+
 	login: (req,res) => {
 		console.log(req.body,'rendered login');
 		User.findOne({ email: req.body.email }, (err,user) => {
@@ -29,8 +40,8 @@ module.exports = {
 
 						res.status(401).json({ success: false, massage: "Invalid pasword" })
 					} else if(isValidPassword){
-						var newUser = Object.keys(user).filter(v => !v === "password" );
-						res.status(200).json({ success: true, user: newUser, token })
+						// var newUser = Object.keys(user).filter(v => !v === "password" );
+						res.status(200).json({ success: true, user, token })
 					}
 			}
 		})

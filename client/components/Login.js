@@ -41,11 +41,11 @@ class Login extends Component {
       .then(res => res.json())
       .then(res => {
         console.log(res, "login data");
-        if(res.data.success){
-          // localStorage.setItem("jwt", res.data.token);
-          // this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
-          // this.setState({ user: {} });
-          // this.props.history.push('/');
+        if(res.success){
+          localStorage.setItem("jwt", res.token);
+          this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res });
+          this.setState({ user: {} });
+          this.props.history.push('/');
         }
       })
       .catch(err => {
@@ -54,7 +54,7 @@ class Login extends Component {
         setTimeout(() => this.setState({ error: "" }), 1000);
       });
     } else if (!isValidEmail){
-      this.setState({ error: "Invalid email" });
+      this.setState({ error: "Invalid email address" });
     } else if (password.length < 6){
       this.setState({ error: "Password length is too short" });
     } else {
@@ -81,7 +81,7 @@ class Login extends Component {
           onChange={ this.handleChange }
           value={ this.state.user.password }
           />
-        <button onClick={ this.handleSubmit }>
+        <button onClick={ this.handleClick }>
           Login
         </button>
       </form>
