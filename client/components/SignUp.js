@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
 
 import validateEmail from '../utils/validateEmail';
-
-console.log(validateEmail, "validateEmail SignUp");
+const url = "http://localhost:3000/api/v1/"
+// console.log(validateEmail, "validateEmail check...");
 
 class SignUp extends Component {
   state = {
@@ -12,7 +12,8 @@ class SignUp extends Component {
       email: "",
       password: "",
       confirmPassword: ""
-    }
+    },
+    error: ""
   }
 
   handleChange = (e) => {
@@ -34,35 +35,37 @@ class SignUp extends Component {
       confirmPassword
     } = this.state.user;
 
-    const isValidEmail = email.include('.com');
+    const isValidEmail = validateEmail(email)
 
     console.log(isValidEmail, "check mail demo...");
 
     if(userName && email && isValidEmail && password.length >= 6 && confirmPassword.length >= 6){
       if(password === confirmPassword){
-        fetch('http://localhost:3000/api/v1/users/register',{
-          method: "POST",
+        fetch(`${url}users/register`,{
+          method: 'POST',
+          mode: 'cors',
           headers: {
-            "Content-type": 'appliction/json'
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify(this.state.user)
         })
-        .then((res) => {
-          console.log(res, "login data");
+        .then(res => res.json())
+        .then(res => {
+          console.log(res, "signup data");
           if(res.data.success){
-            localStorage.setItem("jwt", res.data.token);
-            this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
-            this.setState({ user: {} });
-            this.props.history.push('/');
+            // localStorage.setItem("jwt", res.data.token);
+            // this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
+            // this.setState({ user: {} });
+            // this.props.history.push('/');
           }
         })
         .catch(function (err) {
           console.log(err, "catch error");
-          this.setState({ error: "Wrong email Address" });
-          setTimeout(() => this.setState({ error: "" }), 1000);
+          // this.setState({ error: "Wrong email Address" });
+          // setTimeout(() => this.setState({ error: "" }), 1000);
         });
       } else {
-        this.setState({ error: "Email did not match" });
+        this.setState({ error: "password did not match" });
       }
     } else {
       this.setState({ error: "Please fill all the feilds" });
@@ -70,8 +73,10 @@ class SignUp extends Component {
   }
 
   render() {
+    const { error } = this.state;
     return (
       <form>
+        <p className={ error } style={{ color: "red" }}>{ error }</p>
         <input
           type="text"
           name="userName"
@@ -100,7 +105,7 @@ class SignUp extends Component {
           onChange={ this.handleChange }
           value={ this.state.user.confirmPassword }
           />
-        <button onSubmit={ this.handleSubmit }>
+        <button onClick={ this.handleSubmit }>
           SignUp
         </button>
       </form>
@@ -108,4 +113,9 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+function mapStateToProps(state){
+  // console.log(state, "register mapStateToProps");
+  return { state }
+}
+
+export default connect(mapStateToProps)(SignUp);
