@@ -25,7 +25,10 @@ class Chart extends Component {
 				{
 					label: "Avg. Likes per day",
 					data,
-					backgroundColor: ["rgba(255, 99, 132, 0.6)"]
+					fillColor: "rgba(99,123,133,0.4)",
+					strokeColor: "rgba(220,220,220,1)",
+					pointColor: "rgba(220,220,220,1)",
+					pointStrokeColor: "#fff"
 				}
 			]
 		};
@@ -41,7 +44,10 @@ class Chart extends Component {
 				{
 					label: "Avg. Likes per day",
 					data,
-					backgroundColor: ["rgba(255, 99, 132, 0.6)"]
+					fillColor: "rgba(99,123,133,0.4)",
+					strokeColor: "rgba(220,220,220,1)",
+					pointColor: "rgba(220,220,220,1)",
+					pointStrokeColor: "#fff"
 				}
 			]
 		};

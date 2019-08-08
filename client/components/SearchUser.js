@@ -53,7 +53,7 @@ class SearchUser extends Component {
 
 	sortByDays(tweets) {
 		console.log("in sortByDays method");
-		
+
 		const { user } = tweets[0];
 
 		let tweetsObj = tweets.reduce((acc, curr) => {
@@ -125,31 +125,44 @@ class SearchUser extends Component {
 	render() {
 		const { username, message, isLoading, user, tweets } = this.state;
 		return (
-			<>
-				<div>
-					<div className="">
-						<select>
-							<option value="0">Twitter</option>
-							<option value="1">Instagram</option>
-						</select>
+			<div class="row">
+				<div className="col s8 offset-s2">
+					<div>
+						<form>
+							<div class="input-field col s12">
+								<select>
+									<option value="" disabled selected>
+										Choose your option
+									</option>
+									<option value="1">Twitter</option>
+									<option value="2">Instagram</option>
+								</select>
+								<label>Social media</label>
+							</div>
+							<input
+								type="text"
+								placeholder="username"
+								value={username}
+								onChange={this.handleChange}
+							/>
+							<button
+								className="waves-effect waves-light btn"
+								onClick={this.handleClick}
+							>
+								Search
+							</button>
+						</form>
+						<p>{message}</p>
+						{isLoading ? <p>Loading...</p> : <></>}
 					</div>
-					<input
-						type="text"
-						placeholder="username"
-						value={username}
-						onChange={this.handleChange}
-					/>
-					<button onClick={this.handleClick}>Search</button>
-					<p>{message}</p>
-					{isLoading ? <p>Loading...</p> : <></>}
+					{tweets ? (
+						<>
+							<Chart chartData={tweets} user={user} />
+							<Table tableData={tweets} user={user} />
+						</>
+					) : null}
 				</div>
-				{tweets ? (
-					<>
-						<Chart chartData={tweets} user={user} />
-						<Table tableData={tweets} user={user} />
-					</>
-				) : null}
-			</>
+			</div>
 		);
 	}
 }
