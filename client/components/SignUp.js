@@ -76,7 +76,7 @@ class SignUp extends Component {
 	render() {
 		const { error } = this.state;
 		return (
-			<div class="row">
+			<div className="row">
 				<div className="col s8 offset-s2">
 					<form>
 						<p className={error} style={{ color: "red" }}>
@@ -111,7 +111,7 @@ class SignUp extends Component {
 							value={this.state.user.confirmPassword}
 						/>
 						<button
-							className="waves-effect waves-light btn"
+							className=" waves-effect waves-light btn"
 							onClick={this.handleSubmit}
 						>
 							SignUp
