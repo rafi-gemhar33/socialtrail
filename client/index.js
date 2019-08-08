@@ -7,8 +7,6 @@ import { Provider } from 'react-redux';
 import './scss/index.scss'
 import Wrapper from './Wrapper';
 
-
-
 ReactDOM.render(
   <Wrapper>
     <App /> 

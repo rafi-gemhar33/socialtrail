@@ -9,8 +9,10 @@ const setTokenToAxios = (token) => {
 
 export const getCurrentUser = () => {
   return (dispatch => {
-    axios.get(`${rootUrl}/users/me`)
+    fetch.get(`${rootUrl}/users/me`)
+    .then(res => res.json())
     .then(res => {
+      console.log(data, "auto login");
       dispatch({
         type: 'USER_LOGIN_SUCCESS',
         data: res.data

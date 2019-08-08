@@ -43,7 +43,7 @@ class SignUp extends Component {
         fetch('http://localhost:3000/api/v1/users/register',{
           method: "POST",
           headers: {
-            "Content-type", 'appliction/json'
+            "Content-type": 'appliction/json'
           },
           body: JSON.stringify(this.state.user)
         })
