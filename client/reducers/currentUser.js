@@ -9,7 +9,7 @@ function currentUser(state = initialState, action) {
     case 'USER_LOGIN_SUCCESS':
       return {
         ...state,
-        user: action.data.user,
+        user: action.data,
         isAuthInProgress: false
       }
     

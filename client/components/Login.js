@@ -39,13 +39,13 @@ class Login extends Component {
           body: JSON.stringify(this.state.user)
       })
       .then(res => res.json())
-      .then(res => {
-        console.log(res, "login data");
-        if(res.data.success){
-          // localStorage.setItem("jwt", res.data.token);
-          // this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
-          // this.setState({ user: {} });
-          // this.props.history.push('/');
+      .then(data => {
+        console.log(data, "login data");
+        if(data.success){
+          localStorage.setItem("jwt", data.token);
+          this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data });
+          this.setState({ user: {} });
+          this.props.history.push('/');
         }
       })
       .catch(err => {
@@ -54,7 +54,7 @@ class Login extends Component {
         setTimeout(() => this.setState({ error: "" }), 1000);
       });
     } else if (!isValidEmail){
-      this.setState({ error: "Invalid email" });
+      this.setState({ error: "Invalid email address" });
     } else if (password.length < 6){
       this.setState({ error: "Password length is too short" });
     } else {
