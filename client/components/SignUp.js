@@ -49,11 +49,11 @@ class SignUp extends Component {
           body: JSON.stringify(this.state.user)
         })
         .then(res => res.json())
-        .then(res => {
-          console.log(res, "signup data");
-          if(res.success){
-            // localStorage.setItem("jwt", res.token);
-            this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res});
+        .then(data => {
+          console.log(data, "signup data");
+          if(data.success){
+            // localStorage.setItem("jwt", data.token);
+            this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data});
             this.setState({ user: {} });
             this.props.history.push('/');
           }

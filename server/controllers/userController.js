@@ -8,16 +8,30 @@ module.exports = {
 	},
 
 	getAllUsers: (req,res) => {
-		console.log('rendered2');
-	
-	},
+		console.log(req.user);
 
-	verifyToken: (req,res) => {
-		console.log(req.body);
 		User.findOne({ _id: req.user.id }, (err, user) => {
 			if(err){
 				return res.status(500).json({ error: err, success: false, massege: "Server error" });
-			} else if(user){ 
+			} else if(user && user.isAdmin){
+				User.find({}).select('-password').exec((err, users) => {
+					if(err){
+						return res.status(500).json({ error: err, success: false, massege: "Server error" });
+					} else if(users){
+						return res.status(200).json({ success: true, users });
+					}
+				})
+			} else if(!user.isAdmin){
+					return res.status(401).json({ success: false, massage: "unauthorized" });
+			}
+		})		
+	},
+
+	verifyToken: (req,res) => {
+		User.findOne({ _id: req.user.id }).select('-password').exec((err, user) => {
+			if(err){
+				return res.status(500).json({ error: err, success: false, massege: "Server error" });
+			} else if(user){
 				return res.status(200).json({ success: true, user });
 			}
 		})
