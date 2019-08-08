@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import validateEmail from "../utils/validateEmail";
-const url = "http://localhost:3000/api/v1/";
-// console.log(validateEmail, "validateEmail check...");
+import validateEmail from '../utils/validateEmail';
+const url = "http://localhost:3000/api/v1/"
 
 class SignUp extends Component {
 	state = {
@@ -34,44 +33,38 @@ class SignUp extends Component {
 
 		console.log(isValidEmail, "check mail demo...");
 
-		if (
-			userName &&
-			email &&
-			isValidEmail &&
-			password.length >= 6 &&
-			confirmPassword.length >= 6
-		) {
-			if (password === confirmPassword) {
-				fetch(`${url}users/register`, {
-					method: "POST",
-					mode: "cors",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify(this.state.user)
-				})
-					.then(res => res.json())
-					.then(res => {
-						console.log(res, "signup data");
-						if (res.data.success) {
-							// localStorage.setItem("jwt", res.data.token);
-							// this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
-							// this.setState({ user: {} });
-							// this.props.history.push('/');
-						}
-					})
-					.catch(function(err) {
-						console.log(err, "catch error");
-						// this.setState({ error: "Wrong email Address" });
-						// setTimeout(() => this.setState({ error: "" }), 1000);
-					});
-			} else {
-				this.setState({ error: "password did not match" });
-			}
-		} else {
-			this.setState({ error: "Please fill all the feilds" });
-		}
-	};
+    if(userName && email && isValidEmail && password.length >= 6 && confirmPassword.length >= 6){
+      if(password === confirmPassword){
+        fetch(`${url}users/register`,{
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.state.user)
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data, "signup data");
+          if(data.success){
+            // localStorage.setItem("jwt", data.token);
+            this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data});
+            this.setState({ user: {} });
+            this.props.history.push('/');
+          }
+        })
+        .catch(function (err) {
+          console.log(err, "catch error");
+          // this.setState({ error: "Wrong email Address" });
+          // setTimeout(() => this.setState({ error: "" }), 1000);
+        });
+      } else {
+        this.setState({ error: "password did not match" });
+      }
+    } else {
+      this.setState({ error: "Please fill all the feilds" });
+    }
+  }
 
 	render() {
 		const { error } = this.state;

@@ -11,22 +11,22 @@ import HomePage from "../components/HomePage";
 import Navbar from "../components/Navbar";
 
 class App extends Component {
-	state = {
-		token: ""
-	};
+  state = { 
+    token: ""
+  }
 
-	componentDidMount() {
-		var token = localStorage.getItem("jwt") || "";
-		if (token) {
-			this.setState({ token: token });
-			this.props.dispatch(getCurrentUser(token));
-		} else {
-			this.props.dispatch(noToken());
-		}
-	}
+  componentDidMount() {
+    var token = localStorage.getItem('jwt') || '';
+    if(token) {
+      // this.setState({token: token})
+      this.props.dispatch(getCurrentUser(token))
+    } else {
+      this.props.dispatch(noToken());
+    }
+  }
 
-	render() {
-		return (
+  render() {
+    return (
 			<div>
 				<Navbar />
 				<div className="container">
@@ -38,8 +38,8 @@ class App extends Component {
 					</Switch>
 				</div>
 			</div>
-		);
-	}
+    );
+  }
 }
 
 const mapStateToProps = state => {

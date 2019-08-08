@@ -1,31 +1,34 @@
-import axios from 'axios';
+// import axios from 'axios';
 
-const rootUrl = 'http://localhost:3000/api/v1';
+const url = 'http://localhost:3000/api/v1';
 
-const setTokenToAxios = (token) => {
-  const newToken = localStorage.getItem('authToken') || '';
-  axios.defaults.headers.Authorization = newToken;
-}
+// const setTokenToAxios = (token) => {
+//   const newToken = localStorage.getItem('authToken') || '';
+//   axios.defaults.headers.Authorization = newToken;
+// }
 
 export const getCurrentUser = (token) => {
   return (dispatch => {
-    fetch(`${rootUrl}/users/me`,{
+    fetch(`${url}/users/me`,{
       method: "GET",
       headers: {
-        "Content-type": 'appliction/json',
-        "Authorization": token
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': token
       }
     })
     .then(res => res.json())
-    .then(res => {
-      console.log(data, "auto login");
-      dispatch({
-        type: 'USER_LOGIN_SUCCESS',
-        data: res.data
-      })
+    .then(data => {
+      if(data){
+        dispatch({
+          type: 'USER_LOGIN_SUCCESS',
+          data
+        })
+      }
     })
     .catch(err => {
-      dispatch({type: 'USER_LOGIN_FAILED'})
+      console.log(err, "action error");
+      // dispatch({type: 'USER_LOGIN_FAILED'})
     })
   })
 }

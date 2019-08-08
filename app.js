@@ -8,7 +8,6 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const expressStaticGzip = require('express-static-gzip');
 const mongoose = require('mongoose');
-// const bodyParser = require('body-parser');
 
 const indexRouter = require('./server/routes/index');
 const apiRouter = require('./server/routes/api')
@@ -41,11 +40,6 @@ app.use('/dist/bundle', expressStaticGzip(path.join(__dirname, 'dist/bundle'), {
   }
 }));
 
-// app.use(bodyParser.urlencoded({
-//   extended: true
-// }));
-// app.use(bodyParser.json());
-
 // fix depreciation warning.
 mongoose.set('useFindAndModify', false);
 mongoose.set('useNewUrlParser', true);
@@ -72,8 +66,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Route handler
-app.use('/*', indexRouter); // react handler
 app.use('/api/v1', apiRouter) // api route handler
+app.use('/*', indexRouter); // react handler
 
 
 // catch 404 and forward to error handler
