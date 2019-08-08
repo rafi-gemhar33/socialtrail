@@ -1,4 +1,7 @@
 node_modules
 dist
+<<<<<<< HEAD
 config
+=======
+>>>>>>> 76a771c643a45451e5ad830ca471423c37c76020
 .env
