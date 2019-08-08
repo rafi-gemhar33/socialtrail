@@ -7,8 +7,6 @@ import { Provider } from 'react-redux';
 import './scss/index.scss'
 import Wrapper from './Wrapper';
 
-
-
 ReactDOM.render(
   <Wrapper>
     <App /> 
@@ -17,5 +15,6 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-
-  
+if (module.hot) {
+  module.hot.accept();
+}

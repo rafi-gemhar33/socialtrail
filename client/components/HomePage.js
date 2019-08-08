@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Login from './Login';
 import SearchUser from "./SearchUser";
+import Canvas from "./Canvas"
 
 const HomePage = () => {
   return (
@@ -8,6 +9,7 @@ const HomePage = () => {
     	<h1>Social Media Tracker</h1>
     	<Login />
       <SearchUser />
+      <Canvas />
     </div>
   );
 }
