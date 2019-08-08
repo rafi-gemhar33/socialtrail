@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import validateEmail from '../utils/validateEmail';
-console.log(validateEmail, "validateEmail SignUp");
 
 class SignUp extends Component {
   state = {
@@ -49,7 +48,7 @@ class SignUp extends Component {
         })
         .then(res => res.json())
         .then(res => {
-          console.log(res, "login data");
+          console.log(res, "signup data");
           if(res.data.success){
             localStorage.setItem("jwt", res.data.token);
             this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
@@ -71,6 +70,7 @@ class SignUp extends Component {
   }
 
   render() {
+    const { error } = this.state;
     return (
       <form>
         <p className={ error }>{ error }</p>
@@ -111,7 +111,7 @@ class SignUp extends Component {
 }
 
 function mapStateToProps(state){
-  console.log(state, "login mapStateToProps");
+  console.log(state, "register mapStateToProps");
   return { state }
 }
 

@@ -7,9 +7,15 @@ const setTokenToAxios = (token) => {
   axios.defaults.headers.Authorization = newToken;
 }
 
-export const getCurrentUser = () => {
+export const getCurrentUser = (token) => {
   return (dispatch => {
-    fetch.get(`${rootUrl}/users/me`)
+    fetch(`${rootUrl}/users/me`,{
+      method: "GET",
+      headers: {
+        "Content-type": 'appliction/json',
+        "Authorization": token
+      }
+    })
     .then(res => res.json())
     .then(res => {
       console.log(data, "auto login");

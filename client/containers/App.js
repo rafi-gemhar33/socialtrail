@@ -18,7 +18,7 @@ class App extends Component {
     var token = localStorage.getItem('jwt') || '';
     if(token) {
       this.setState({token: token})
-      this.props.dispatch(getCurrentUser())
+      this.props.dispatch(getCurrentUser(token))
     } else {
       this.props.dispatch(noToken());
     }
