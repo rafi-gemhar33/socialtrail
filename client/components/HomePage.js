@@ -9,7 +9,7 @@ const HomePage = () => {
     	<h1>Social Media Tracker</h1>
     	<Login />
       <SearchUser />
-      <Canvas />
+      {/* <Canvas /> */}
     </div>
   );
 }

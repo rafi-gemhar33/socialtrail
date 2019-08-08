@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 // import axios from "axios";
+
 import Chart from "./Chart";
+import Table from "./Table";
 
 class SearchUser extends Component {
 	state = {
@@ -118,7 +120,7 @@ class SearchUser extends Component {
 	};
 
 	render() {
-		const {username, message, isLoading, user, tweets} = this.state;
+		const { username, message, isLoading, user, tweets } = this.state;
 		return (
 			<>
 				<div>
@@ -138,10 +140,12 @@ class SearchUser extends Component {
 					<p>{message}</p>
 					{isLoading ? <p>Loading...</p> : <></>}
 				</div>
-				{
-					tweets ? <Chart chartData={tweets} user={user} location="" legendPosition=""/> : null
-				}
-				
+				{tweets ? (
+					<>
+						<Chart chartData={tweets} user={user} />
+						<Table tableData={tweets} user={user} />
+					</>
+				) : null}
 			</>
 		);
 	}
