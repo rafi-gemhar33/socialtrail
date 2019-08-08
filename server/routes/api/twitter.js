@@ -2,16 +2,15 @@ const express = require("express");
 const router = express.Router();
 
 const Twitter = require("twitter");
-const twitterSecret = require("../../config/twitterSecret");
 
 /* GET home page. */
-router.post("/", function(req, res, next) {
+router.post("/", function(req, res, next) {	
 	
 	const client = new Twitter({
-		consumer_key: twitterSecret.TWITTER_CONSUMER_KEY,
-		consumer_secret: twitterSecret.TWITTER_CONSUMER_SECRET,
-		access_token_key: twitterSecret.TWITTER_ACCESS_TOKEN_KEY,
-		access_token_secret: twitterSecret.TWITTER_ACCESS_TOKEN_SECRET
+		consumer_key: process.env.TWITTER_CONSUMER_KEY,
+		consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
+		access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
+		access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
   });
 
 	const params = {   screen_name: req.body.username || "",
