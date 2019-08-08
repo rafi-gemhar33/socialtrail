@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
+import validateEmail from '../utils/validateEmail';
+
+const url = 'http://localhost:3000/api/v1/';
 
 class Login extends Component {
+  
   state = {
     user: {
       email: "",
       password: ""
-    }
+    },
+    error: ""
   }
 
   handleChange = (e) => {
@@ -23,30 +27,46 @@ class Login extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { email, password } = this.state.user;
-    if(email && password){
-      fetch.post('http://localhost:3000/api/v1/users/login',{
-        
+
+    const isValidEmail = validateEmail(email)
+
+    if(isValidEmail && password.length >= 6){
+      fetch(`${url}users/login`,{
+        method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(this.state.user)
       })
-      .then((res) => {
+      .then(res => res.json())
+      .then(res => {
         console.log(res, "login data");
         if(res.data.success){
-          localStorage.setItem("jwt", res.data.token);
-          this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
-          this.setState({ user: {} });
-          this.props.history.push('/');
+          // localStorage.setItem("jwt", res.data.token);
+          // this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
+          // this.setState({ user: {} });
+          // this.props.history.push('/');
         }
       })
-      .catch(function (err) {
-        console.log(err, "catch error");
+      .catch(err => {
+        console.log(err,this, "catch error");
         this.setState({ error: "Wrong email address" });
         setTimeout(() => this.setState({ error: "" }), 1000);
       });
+    } else if (!isValidEmail){
+      this.setState({ error: "Invalid email" });
+    } else if (password.length < 6){
+      this.setState({ error: "Password length is too short" });
+    } else {
+      this.setState({ error: "Please fill all the feilds" });
     }
   }
 
   render() {
+    const { error } = this.state;
     return (
       <form>
+        <p className={ error }>{ error }</p>
         <input
           type="text"
           name="email"
@@ -61,7 +81,7 @@ class Login extends Component {
           onChange={ this.handleChange }
           value={ this.state.user.password }
           />
-        <button onSubmit={ this.handleSubmit }>
+        <button onClick={ this.handleSubmit }>
           Login
         </button>
       </form>
@@ -69,5 +89,9 @@ class Login extends Component {
   }
 }
 
+function mapStateToProps(state){
+  console.log(state, "login mapStateToProps");
+  return { state }
+}
 
-export default Login;
+export default connect(mapStateToProps)(Login);

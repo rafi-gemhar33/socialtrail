@@ -8,6 +8,7 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const expressStaticGzip = require('express-static-gzip');
 const mongoose = require('mongoose');
+// const bodyParser = require('body-parser');
 
 const indexRouter = require('./server/routes/index');
 const apiRouter = require('./server/routes/api')
@@ -39,6 +40,11 @@ app.use('/dist/bundle', expressStaticGzip(path.join(__dirname, 'dist/bundle'), {
     res.setHeader('Cache-Control', 'public, max-age=31536000');
   }
 }));
+
+// app.use(bodyParser.urlencoded({
+//   extended: true
+// }));
+// app.use(bodyParser.json());
 
 // fix depreciation warning.
 mongoose.set('useFindAndModify', false);
