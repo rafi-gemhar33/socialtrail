@@ -13,7 +13,8 @@ class SearchUser extends Component {
 		user: null
 	};
 
-	hanhleClick = () => {
+	handleClick = () => {
+		console.log("in handleClick-SearchUser method");
 		if (this.state.username.length > 0) {
 			this.setState({ isLoading: true });
 			fetch("http://localhost:3000/api/v1/twitter", {
@@ -51,6 +52,8 @@ class SearchUser extends Component {
 	};
 
 	sortByDays(tweets) {
+		console.log("in sortByDays method");
+		
 		const { user } = tweets[0];
 
 		let tweetsObj = tweets.reduce((acc, curr) => {
@@ -136,7 +139,7 @@ class SearchUser extends Component {
 						value={username}
 						onChange={this.handleChange}
 					/>
-					<button onClick={this.hanhleClick}>Search 999</button>
+					<button onClick={this.handleClick}>Search</button>
 					<p>{message}</p>
 					{isLoading ? <p>Loading...</p> : <></>}
 				</div>

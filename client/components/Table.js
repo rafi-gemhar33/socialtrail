@@ -8,7 +8,7 @@ class Table extends Component {
 	render() {
 		return (
 			<>
-				<table class="content-table">
+				<table className="content-table">
 					<thead>
 						<tr>
 							<th>DATES</th>
@@ -22,8 +22,7 @@ class Table extends Component {
 					<tbody>
 						{this.props.tableData.map(day => {
 							return (
-								<>
-									<tr>
+									<tr key={day[0]}>
 										<td>{day[0]}</td>
 										<td>{this.props.user.friends_count}</td>
 										<td>{this.props.user.followers_count}</td>
@@ -31,7 +30,6 @@ class Table extends Component {
 										<td>{day[1].totalLikes}</td>
 										<td>{day[1].totalRT}</td>
 									</tr>
-								</>
 							);
 						})}
 					</tbody>
