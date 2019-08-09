@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 const Navbar = () => {
 	return (
@@ -11,13 +11,13 @@ const Navbar = () => {
 					</Link>
 					<ul id="nav-mobile" className="right hide-on-med-and-down">
 						<li>
-							<Link to="/">Home</Link>
+							<NavLink to="/">Home</NavLink>
 						</li>
 						<li>
-							<Link to="/login">Login</Link>
+							<NavLink to="/login">Login</NavLink>
 						</li>
 						<li>
-							<Link to="/register">SignUp</Link>
+							<NavLink to="/register">SignUp</NavLink>
 						</li>
 					</ul>
 				</div>

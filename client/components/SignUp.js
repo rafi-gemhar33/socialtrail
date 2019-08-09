@@ -70,8 +70,8 @@ class SignUp extends Component {
 		const { error } = this.state;
 		return (
 			<div className="row">
-				<div className="col s8 offset-s2">
-					<form>
+				<div className=" col s8 offset-s2">
+					<form className=" form-container">
 						<p className={error} style={{ color: "red" }}>
 							{error}
 						</p>

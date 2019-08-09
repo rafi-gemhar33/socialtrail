@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 import Chart from "./Chart";
 import Table from "./Table";
-
+import { testTweets, testUser } from "../../tweet";
 class SearchUser extends Component {
 	state = {
 		username: "emmawedekind",
@@ -14,41 +14,45 @@ class SearchUser extends Component {
 	};
 
 	handleClick = () => {
-		console.log("in handleClick-SearchUser method");
-		if (this.state.username.length > 0) {
-			this.setState({ isLoading: true });
-			fetch("http://localhost:3000/api/v1/twitter", {
-				method: "POST", // *GET, POST, PUT, DELETE, etc.
-				mode: "cors", // no-cors, cors, *same-origin
-				cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-				credentials: "same-origin", // include, *same-origin, omit
-				headers: {
-					"Content-Type": "application/json"
-					// 'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				redirect: "follow", // manual, *follow, error
-				referrer: "no-referrer", // no-referrer, *client
-				body: JSON.stringify({ username: this.state.username })
-			})
-				.then(response => {
-					return response.json();
-				})
-				.then(res => {
-					if (res.success) {
-						let { sortedTweets, user } = this.sortByDays(res.tweets);
-						this.setState({ tweets: sortedTweets, isLoading: false, user });
-					} else {
-						this.setState({
-							message: "it seems the username does not exist check again",
-							isLoading: false
-						});
-					}
-				});
-		} else {
-			this.setState({
-				message: "why the hell are you searching for a empty username"
-			});
-		}
+		// console.log(testTweets);
+		this.setState({ tweets: testTweets, isLoading: false, user: testUser });
+		// if (this.state.username.length > 0) {
+		// 	this.setState({ isLoading: true });
+		// 	fetch("http://localhost:3000/api/v1/twitter", {
+		// 		method: "POST", // *GET, POST, PUT, DELETE, etc.
+		// 		mode: "cors", // no-cors, cors, *same-origin
+		// 		cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+		// 		credentials: "same-origin", // include, *same-origin, omit
+		// 		headers: {
+		// 			"Content-Type": "application/json"
+		// 			// 'Content-Type': 'application/x-www-form-urlencoded',
+		// 		},
+		// 		redirect: "follow", // manual, *follow, error
+		// 		referrer: "no-referrer", // no-referrer, *client
+		// 		body: JSON.stringify({ username: this.state.username })
+		// 	})
+		// 		.then(response => {
+		// 			return response.json();
+		// 		})
+		// 		.then(res => {
+		// 			if (res.success) {
+		// 				let { sortedTweets, user } = this.sortByDays(res.tweets);
+		// 				console.log(sortedTweets, user);
+
+		// 				this.setState({ tweets: sortedTweets, isLoading: false, user });
+		// 			} else {
+		// 				console.log(res);
+		// 				this.setState({
+		// 					message: "it seems the username does not exist check again",
+		// 					isLoading: false
+		// 				});
+		// 			}
+		// 		});
+		// } else {
+		// 	this.setState({
+		// 		message: "why the hell are you searching for a empty username"
+		// 	});
+		// }
 	};
 
 	sortByDays(tweets) {
@@ -127,35 +131,73 @@ class SearchUser extends Component {
 		return (
 			<div className="row">
 				<div className="col s8 offset-s2">
-					<div>
+					<div className="form-container">
 						{/* <form> */}
-							<div className="input-field col s12">
-								{/* <select>
-									<option value="" disabled selected>
-										Choose your option
-									</option>
-									<option value="1">Twitter</option>
-									<option value="2">Instagram</option>
-								</select>
-								<label>Social media</label> */}
-							</div>
+						<div className="input-field">
+							<select className="browser-default">
+								<option>Twitter</option>
+								<option>Instagram</option>
+							</select>
+							{/* <label>Social media</label> */}
+						</div>
+						<div>
 							<input
-								
 								type="text"
 								placeholder="username"
 								value={username}
 								onChange={this.handleChange}
 							/>
-							<button
-								className="btn "
-								onClick={this.handleClick}
-							>
+							<button className="btn " onClick={this.handleClick}>
 								Search
 							</button>
+						</div>
 						{/* </form> */}
 						<p>{message}</p>
 						{isLoading ? <p>Loading...</p> : <></>}
 					</div>
+					{user ? (
+						<>
+							<div className="row">
+								<div className="col s12 m12">
+									<div className="card ">
+										<div className="card-image">
+											<img src={user.profile_banner_url} />
+										</div>
+										<div className="row">
+											<div className="col s3 offset-s1 dp-box">
+												<img
+													className="dp circle responsive-img"
+													src={user.profile_image_url}
+												/>
+											</div>
+										</div>
+										<div className="card-content user-content">
+											<span className="card-title activator grey-text text-darken-4">
+												{user.name}
+												<i className="material-icons right">more_vert</i>
+											</span>
+											<p>{user.description}</p>
+										</div>
+										<div class="card-tabs">
+											<ul class="tabs tabs-fixed-width">
+												<li class="tab">
+													<a href="#test4">Test 1</a>
+												</li>
+												<li class="tab">
+													<a class="active" href="#test5">
+														Test 2
+													</a>
+												</li>
+												<li class="tab">
+													<a href="#test6">Test 3</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</>
+					) : null}
 					{tweets ? (
 						<>
 							<Chart chartData={tweets} user={user} />

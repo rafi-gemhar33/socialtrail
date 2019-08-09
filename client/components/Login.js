@@ -66,7 +66,7 @@ class Login extends Component {
 		return (
 			<div className="row">
 				<div className="col s8 offset-s2">
-					<form>
+					<form className=" form-container">
 						<p className={error}>{error}</p>
 						<input
 							type="text"
