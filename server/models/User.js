@@ -23,6 +23,12 @@ const UserSchema = new Schema({
 		min: 6,
 		max: 20
 	},
+	followingAccounts: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: "TwitterAccount",
+		}
+	]
 
 }, { timestamps: true });
 
