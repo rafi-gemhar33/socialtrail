@@ -12,6 +12,11 @@ h1 {
 	margin-bottom: 100px;
 }
 
+.logo {
+	font-family: 'Bungee Inline', cursive;
+	font-size: 2rem;
+}
+
 .form-container {
 	padding: 40px 20px;
 	background-color: rgba(245, 245, 245, 0.822);
@@ -36,4 +41,8 @@ h1 {
 
 .card .card-image .dp {
 	border-radius: 50% !important;
+}
+
+.error {
+	color: tomato;
 }

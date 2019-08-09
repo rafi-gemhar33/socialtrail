@@ -7,53 +7,54 @@ import UserCard from "./UserCard"
 import { testTweets, testUser } from "../../tweet";
 class SearchUser extends Component {
 	state = {
-		username: "emmawedekind",
-		message: "",
+		username: "dprank",
+		message: "pre filled for testing",
 		tweets: null,
 		isLoading: false,
 		user: null
 	};
 
 	handleClick = () => {
-		// console.log(testTweets);
-		this.setState({ tweets: testTweets, isLoading: false, user: testUser });
-		// if (this.state.username.length > 0) {
-		// 	this.setState({ isLoading: true });
-		// 	fetch("http://localhost:3000/api/v1/twitter", {
-		// 		method: "POST", // *GET, POST, PUT, DELETE, etc.
-		// 		mode: "cors", // no-cors, cors, *same-origin
-		// 		cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-		// 		credentials: "same-origin", // include, *same-origin, omit
-		// 		headers: {
-		// 			"Content-Type": "application/json"
-		// 			// 'Content-Type': 'application/x-www-form-urlencoded',
-		// 		},
-		// 		redirect: "follow", // manual, *follow, error
-		// 		referrer: "no-referrer", // no-referrer, *client
-		// 		body: JSON.stringify({ username: this.state.username })
-		// 	})
-		// 		.then(response => {
-		// 			return response.json();
-		// 		})
-		// 		.then(res => {
-		// 			if (res.success) {
-		// 				let { sortedTweets, user } = this.sortByDays(res.tweets);
-		// 				console.log(sortedTweets, user);
+console.log("in handle click");
+		//Testing data
+		// this.setState({ tweets: testTweets, isLoading: false, user: testUser });
+		if (this.state.username.length > 0) {
+			this.setState({ isLoading: true });
+			fetch("http://localhost:3000/api/v1/twitter", {
+				method: "POST", // *GET, POST, PUT, DELETE, etc.
+				mode: "cors", // no-cors, cors, *same-origin
+				cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+				credentials: "same-origin", // include, *same-origin, omit
+				headers: {
+					"Content-Type": "application/json"
+					// 'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				redirect: "follow", // manual, *follow, error
+				referrer: "no-referrer", // no-referrer, *client
+				body: JSON.stringify({ username: this.state.username })
+			})
+				.then(response => {
+					return response.json();
+				})
+				.then(res => {
+					if (res.success) {
+						let { sortedTweets, user } = this.sortByDays(res.tweets);
+						console.log(sortedTweets, user);
 
-		// 				this.setState({ tweets: sortedTweets, isLoading: false, user });
-		// 			} else {
-		// 				console.log(res);
-		// 				this.setState({
-		// 					message: "it seems the username does not exist check again",
-		// 					isLoading: false
-		// 				});
-		// 			}
-		// 		});
-		// } else {
-		// 	this.setState({
-		// 		message: "why the hell are you searching for a empty username"
-		// 	});
-		// }
+						this.setState({ tweets: sortedTweets, isLoading: false, user });
+					} else {
+						console.log(res);
+						this.setState({
+							message: "it seems the username does not exist check again",
+							isLoading: false
+						});
+					}
+				});
+		} else {
+			this.setState({
+				message: "why the hell are you searching for a empty username"
+			});
+		}
 	};
 
 	sortByDays(tweets) {
@@ -153,7 +154,7 @@ class SearchUser extends Component {
 							</button>
 						</div>
 						{/* </form> */}
-						<p>{message}</p>
+						<p className="error">{message}</p>
 						{isLoading ? <p>Loading...</p> : <></>}
 					</div>
 					{user ? (

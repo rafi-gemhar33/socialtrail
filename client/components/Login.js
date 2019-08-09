@@ -29,38 +29,39 @@ class Login extends Component {
 
 		const isValidEmail = validateEmail(email);
 
-    if(isValidEmail && password.length >= 6){
-      fetch(`${url}users/login`,{
-        method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(this.state.user)
-      })
-      .then(res => res.json())
-      .then(data => {
-        if(data.success){
-					console.log(data);
-					
-          localStorage.setItem("jwt", data.token);
-          this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data });
-          this.setState({ user: {} });
-          this.props.history.push('/');
-        }
-      })
-      .catch(err => {
-        console.log(err,this, "catch error");
-        this.setState({ error: "Wrong email address" });
-        setTimeout(() => this.setState({ error: "" }), 1000);
-      });
-    } else if (!isValidEmail){
-      this.setState({ error: "Invalid email address" });
-    } else if (password.length < 6){
-      this.setState({ error: "Password length is too short" });
-    } else {
-      this.setState({ error: "Please fill all the feilds" });
-    }
-  }
+		if (isValidEmail && password.length >= 6) {
+			fetch(`${url}users/login`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(this.state.user)
+			})
+				.then(res => res.json())
+				.then(data => {
+					if (data.success) {
+						localStorage.setItem("jwt", data.token);
+						this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data });
+						this.setState({ user: {} });
+						this.props.location.navObj.activeNav("home");
+						this.props.history.push("/");
+					} else {
+						this.setState({ error: "Wrong email/password" });
+					}
+				})
+				.catch(err => {
+					console.log(err, this, "catch error");
+					this.setState({ error: "Wrong email address" });
+					setTimeout(() => this.setState({ error: "" }), 1000);
+				});
+		} else if (!isValidEmail) {
+			this.setState({ error: "Invalid email address" });
+		} else if (password.length < 6) {
+			this.setState({ error: "Password length is too short" });
+		} else {
+			this.setState({ error: "Please fill all the feilds" });
+		}
+	};
 
 	render() {
 		const { error } = this.state;
@@ -68,7 +69,7 @@ class Login extends Component {
 			<div className="row">
 				<div className="col s8 offset-s2">
 					<form className=" form-container">
-						<p className={error}>{error}</p>
+						<p className="error">{error}</p>
 						<input
 							type="text"
 							name="email"
@@ -83,10 +84,7 @@ class Login extends Component {
 							onChange={this.handleChange}
 							value={this.state.user.password}
 						/>
-						<button
-							className="  btn"
-							onClick={this.handleSubmit}
-						>
+						<button className=" btn" onClick={this.handleSubmit}>
 							Login
 						</button>
 					</form>

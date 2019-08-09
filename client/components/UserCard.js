@@ -22,7 +22,7 @@ class UserCard extends Component {
 							<div className="dp-box">
 								<img
 									className="dp circle responsive-img"
-									src={this.props.account.profile_image_url}
+									src={this.props.account.profile_image_url.replace("normal", "400x400")}
 								/>
 							</div>
 						</div>
@@ -45,9 +45,7 @@ class UserCard extends Component {
 }
 
 const mapStateToProps = state => {
-	console.log(state);
 	return {
-		
 		currentUser: state.currentUser.user
 	};
 };
