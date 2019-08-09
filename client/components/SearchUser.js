@@ -15,8 +15,8 @@ class SearchUser extends Component {
 	};
 
 	handleClick = () => {
-console.log("in handle click");
-event.preventDefault();
+		console.log("in handle click");
+		event.preventDefault();
 		//Testing data
 		// this.setState({ tweets: testTweets, isLoading: false, user: testUser });
 		if (this.state.username.length > 0) {
@@ -156,8 +156,8 @@ event.preventDefault();
 							</div>
 							<p className="error">{message}</p>
 						</form>
-						{isLoading ? <p>Loading...</p> : <></>}
 					</div>
+					{isLoading ? <p>Loading...</p> : <></>}
 					{user ? <UserCard account={user} /> : null}
 					{tweets ? (
 						<>
