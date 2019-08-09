@@ -20,15 +20,7 @@ function currentUser(state = initialState, action) {
         isAuthInProgress: false,
         user: null
       }
-    
-    case 'LOG_OUT':
-    case 'NO_TOKEN':
-      return {
-        ...state,
-        user: null,
-        isAuthInProgress: false,
-        token: ''
-      }
+        
     default:
       return state;
   }

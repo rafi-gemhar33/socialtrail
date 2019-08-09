@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, withRouter } from "react-router-dom";
 import "../scss/index.scss";
 
 import { getCurrentUser, noToken } from "../actions";
@@ -16,12 +16,13 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // console.log(this.props.history)
     var token = localStorage.getItem('jwt') || '';
     if(token) {
       // this.setState({token: token})
-      this.props.dispatch(getCurrentUser(token))
+      this.props.dispatch(getCurrentUser(token, this.props.history));
     } else {
-      this.props.dispatch(noToken());
+      this.props.history.push('/login');
     }
   }
 
@@ -43,9 +44,10 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
+  // console.log(state.currentUser, "app map state");
 	return {
 		currentUser: state.currentUser.user
 	};
 };
 
-export default connect(mapStateToProps)(App);
+export default withRouter(connect(mapStateToProps)(App));
