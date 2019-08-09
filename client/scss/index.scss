@@ -1,33 +1,39 @@
-
-@import 'table.scss';
+@import "table.scss";
 body {
-  margin: 10x;
+	margin: 10x;
 }
 
 h1 {
-  text-align: center;
-  color: gray;
-  margin-top: 50px;
+	text-align: center;
+	color: gray;
+	margin-top: 50px;
 }
 .navbar-box {
-  margin-bottom: 100px;
+	margin-bottom: 100px;
 }
 
 .form-container {
-  padding: 40px 20px;
-  background-color: rgba(245, 245, 245, 0.822);
+	padding: 40px 20px;
+	background-color: rgba(245, 245, 245, 0.822);
 }
 
 .dp-box {
-  border-radius: 50%;
-  position: absolute;
-  bottom: 200px;
+	height: 10rem;
+	width: 10rem;
+	border-radius: 50% !important;
+	position: absolute;
+	left: 3rem;
+	bottom: -5rem;
 }
 
 .dp {
-  border: 5px solid white;
+	border: 5px solid white;
 }
 
-.user-content{
-  margin-top: 75px;
+.user-content {
+	margin-top: 75px;
+}
+
+.card .card-image .dp {
+	border-radius: 50% !important;
 }

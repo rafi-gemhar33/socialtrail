@@ -3,6 +3,7 @@ import React, { Component } from "react";
 
 import Chart from "./Chart";
 import Table from "./Table";
+import UserCard from "./UserCard"
 import { testTweets, testUser } from "../../tweet";
 class SearchUser extends Component {
 	state = {
@@ -156,47 +157,7 @@ class SearchUser extends Component {
 						{isLoading ? <p>Loading...</p> : <></>}
 					</div>
 					{user ? (
-						<>
-							<div className="row">
-								<div className="col s12 m12">
-									<div className="card ">
-										<div className="card-image">
-											<img src={user.profile_banner_url} />
-										</div>
-										<div className="row">
-											<div className="col s3 offset-s1 dp-box">
-												<img
-													className="dp circle responsive-img"
-													src={user.profile_image_url}
-												/>
-											</div>
-										</div>
-										<div className="card-content user-content">
-											<span className="card-title activator grey-text text-darken-4">
-												{user.name}
-												<i className="material-icons right">more_vert</i>
-											</span>
-											<p>{user.description}</p>
-										</div>
-										<div class="card-tabs">
-											<ul class="tabs tabs-fixed-width">
-												<li class="tab">
-													<a href="#test4">Test 1</a>
-												</li>
-												<li class="tab">
-													<a class="active" href="#test5">
-														Test 2
-													</a>
-												</li>
-												<li class="tab">
-													<a href="#test6">Test 3</a>
-												</li>
-											</ul>
-										</div>
-									</div>
-								</div>
-							</div>
-						</>
+						<UserCard user={user} />
 					) : null}
 					{tweets ? (
 						<>
