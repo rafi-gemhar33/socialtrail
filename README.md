@@ -1,3 +1,4 @@
+
 # SOCIAL MEDIA TRACKER
 
 ### To Install
@@ -40,3 +41,5 @@ Redux, React-Redux: as a store/state manager for React.js
 #### Backend:
 mongoDB: Database
 Node.js and Express: handles all server side routing
+
+
