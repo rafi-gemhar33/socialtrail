@@ -3,18 +3,21 @@ import React, { Component } from "react";
 
 import Chart from "./Chart";
 import Table from "./Table";
-
+import UserCard from "./UserCard"
+import { testTweets, testUser } from "../../tweet";
 class SearchUser extends Component {
 	state = {
-		username: "emmawedekind",
-		message: "",
+		username: "dprank",
+		message: "pre filled for testing",
 		tweets: null,
 		isLoading: false,
 		user: null
 	};
 
 	handleClick = () => {
-		console.log("in handleClick-SearchUser method");
+console.log("in handle click");
+		//Testing data
+		// this.setState({ tweets: testTweets, isLoading: false, user: testUser });
 		if (this.state.username.length > 0) {
 			this.setState({ isLoading: true });
 			fetch("http://localhost:3000/api/v1/twitter", {
@@ -36,8 +39,11 @@ class SearchUser extends Component {
 				.then(res => {
 					if (res.success) {
 						let { sortedTweets, user } = this.sortByDays(res.tweets);
+						console.log(sortedTweets, user);
+
 						this.setState({ tweets: sortedTweets, isLoading: false, user });
 					} else {
+						console.log(res);
 						this.setState({
 							message: "it seems the username does not exist check again",
 							isLoading: false
@@ -127,35 +133,33 @@ class SearchUser extends Component {
 		return (
 			<div className="row">
 				<div className="col s8 offset-s2">
-					<div>
+					<div className="form-container">
 						{/* <form> */}
-							<div className="input-field col s12">
-								{/* <select>
-									<option value="" disabled selected>
-										Choose your option
-									</option>
-									<option value="1">Twitter</option>
-									<option value="2">Instagram</option>
-								</select>
-								<label>Social media</label> */}
-							</div>
+						<div className="input-field">
+							<select className="browser-default">
+								<option>Twitter</option>
+								<option>Instagram</option>
+							</select>
+							{/* <label>Social media</label> */}
+						</div>
+						<div>
 							<input
-								
 								type="text"
 								placeholder="username"
 								value={username}
 								onChange={this.handleChange}
 							/>
-							<button
-								className="btn "
-								onClick={this.handleClick}
-							>
+							<button className="btn " onClick={this.handleClick}>
 								Search
 							</button>
+						</div>
 						{/* </form> */}
-						<p>{message}</p>
+						<p className="error">{message}</p>
 						{isLoading ? <p>Loading...</p> : <></>}
 					</div>
+					{user ? (
+						<UserCard account={user} />
+					) : null}
 					{tweets ? (
 						<>
 							<Chart chartData={tweets} user={user} />

@@ -4,22 +4,22 @@ const router = express.Router();
 const Twitter = require("twitter");
 
 /* GET home page. */
-router.post("/", function(req, res, next) {	
-	
+router.post("/", function(req, res, next) {
 	const client = new Twitter({
 		consumer_key: process.env.TWITTER_CONSUMER_KEY,
 		consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
 		access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
 		access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-  });
+	});
 
-	const params = {   screen_name: req.body.username || "",
-    count:200,
-    // include_rts:false,
-    // trim_user:true,
-    // max_id:1157349134279557125,
-    // exclude_replies:true,
-	 };
+	const params = {
+		screen_name: req.body.username || "",
+		count: 200
+		// include_rts:false,
+		// trim_user:true,
+		// max_id:1157349134279557125,
+		// exclude_replies:true,
+	};
 	client.get("statuses/user_timeline", params, function(
 		error,
 		tweets,
@@ -28,12 +28,12 @@ router.post("/", function(req, res, next) {
 		if (!error) {
 			res.json({
 				success: true,
-				tweets: tweets,
+				tweets: tweets
 			});
 		} else {
 			console.log("error", tweets);
 			res.json({
-				success: false,
+				success: false
 			});
 		}
 	});

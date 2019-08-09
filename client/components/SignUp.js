@@ -49,7 +49,7 @@ class SignUp extends Component {
           if(data.success){
             // localStorage.setItem("jwt", data.token);
             this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data});
-            this.setState({ user: {} });
+						this.setState({ user: {} });
             this.props.history.push('/');
           }
         })
@@ -70,9 +70,9 @@ class SignUp extends Component {
 		const { error } = this.state;
 		return (
 			<div className="row">
-				<div className="col s8 offset-s2">
-					<form>
-						<p className={error} style={{ color: "red" }}>
+				<div className=" col s8 offset-s2">
+					<form className=" form-container">
+						<p className="error">
 							{error}
 						</p>
 						<input
@@ -104,7 +104,7 @@ class SignUp extends Component {
 							value={this.state.user.confirmPassword}
 						/>
 						<button
-							className=" waves-effect waves-light btn"
+							className=" btn"
 							onClick={this.handleSubmit}
 						>
 							SignUp

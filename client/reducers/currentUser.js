@@ -13,15 +13,14 @@ function currentUser(state = initialState, action) {
         isAuthInProgress: false
       }
     
-    case 'USER_LOGIN_FAILED':
-      localStorage.clear();
+    case 'USER_LOGIN_FAILED','LOG_OUT' :
+      localStorage.setItem("jwt", "");
       return {
         ...state,
         isAuthInProgress: false,
         user: null
       }
-    
-    case 'LOG_OUT':
+
     case 'NO_TOKEN':
       return {
         ...state,
