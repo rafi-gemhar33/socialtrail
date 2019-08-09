@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 import Chart from "./Chart";
 import Table from "./Table";
-import UserCard from "./UserCard"
+import UserCard from "./UserCard";
 import { testTweets, testUser } from "../../tweet";
 class SearchUser extends Component {
 	state = {
@@ -16,6 +16,7 @@ class SearchUser extends Component {
 
 	handleClick = () => {
 console.log("in handle click");
+event.preventDefault();
 		//Testing data
 		// this.setState({ tweets: testTweets, isLoading: false, user: testUser });
 		if (this.state.username.length > 0) {
@@ -133,33 +134,31 @@ console.log("in handle click");
 		return (
 			<div className="row">
 				<div className="col s8 offset-s2">
-					<div className="form-container">
-						{/* <form> */}
-						<div className="input-field">
-							<select className="browser-default">
-								<option>Twitter</option>
-								<option>Instagram</option>
-							</select>
-							{/* <label>Social media</label> */}
-						</div>
-						<div>
-							<input
-								type="text"
-								placeholder="username"
-								value={username}
-								onChange={this.handleChange}
-							/>
-							<button className="btn " onClick={this.handleClick}>
-								Search
-							</button>
-						</div>
-						{/* </form> */}
-						<p className="error">{message}</p>
+					<div className="form-container row">
+						<form className="col s8 offset-s2">
+							<div className="input-field">
+								<select className="browser-default">
+									<option>Twitter</option>
+									<option>Instagram</option>
+								</select>
+								{/* <label>Social media</label> */}
+							</div>
+							<div>
+								<input
+									type="text"
+									placeholder="username"
+									value={username}
+									onChange={this.handleChange}
+								/>
+								<button className="btn " onClick={this.handleClick}>
+									Search
+								</button>
+							</div>
+							<p className="error">{message}</p>
+						</form>
 						{isLoading ? <p>Loading...</p> : <></>}
 					</div>
-					{user ? (
-						<UserCard account={user} />
-					) : null}
+					{user ? <UserCard account={user} /> : null}
 					{tweets ? (
 						<>
 							<Chart chartData={tweets} user={user} />

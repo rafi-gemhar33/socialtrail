@@ -68,26 +68,28 @@ class Login extends Component {
 		return (
 			<div className="row">
 				<div className="col s8 offset-s2">
-					<form className=" form-container">
-						<p className="error">{error}</p>
-						<input
-							type="text"
-							name="email"
-							placeholder="Email address"
-							onChange={this.handleChange}
-							value={this.state.user.email}
-						/>
-						<input
-							type="password"
-							name="password"
-							placeholder="password"
-							onChange={this.handleChange}
-							value={this.state.user.password}
-						/>
-						<button className=" btn" onClick={this.handleSubmit}>
-							Login
-						</button>
-					</form>
+					<div className="form-container row">
+						<form className="col s8 offset-s2">
+							<p className="error">{error}</p>
+							<input
+								type="text"
+								name="email"
+								placeholder="Email address"
+								onChange={this.handleChange}
+								value={this.state.user.email}
+							/>
+							<input
+								type="password"
+								name="password"
+								placeholder="password"
+								onChange={this.handleChange}
+								value={this.state.user.password}
+							/>
+							<button className=" btn" onClick={this.handleSubmit}>
+								Login
+							</button>
+						</form>
+					</div>
 				</div>
 			</div>
 		);
