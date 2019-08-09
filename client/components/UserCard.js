@@ -1,35 +1,55 @@
-import React, { Component } from "react";
-import { Link, NavLink } from "react-router-dom";
-
-const UserCard = props => {
-	return (
-		<div className="row">
-			<div className="col s12 m12">
-				<div className="card ">
-					<div className="card-image">
-						<img src={props.user.profile_banner_url} />
-						<div className="dp-box">
-							<img
-								className="dp circle responsive-img"
-								src={props.user.profile_image_url}
-							/>
+import React,{Component} from "react";
+import { connect } from "react-redux";
+import {withRouter} from "react-router-dom"
+class UserCard extends Component {
+	constructor(props){
+		super(props)
+	}
+	handleFollow =() => {
+		if(this.props.currentUser){
+			console.log(this.props.currentUser.user);
+		} else {
+			this.props.history.push('/login');
+		}
+	}
+	render() {
+		return (
+			<div className="row">
+				<div className="col s12 m12">
+					<div className="card ">
+						<div className="card-image">
+							<img src={this.props.account.profile_banner_url} />
+							<div className="dp-box">
+								<img
+									className="dp circle responsive-img"
+									src={this.props.account.profile_image_url}
+								/>
+							</div>
 						</div>
-					</div>
 
-					<div className="card-content user-content">
-						<span className="card-title activator grey-text text-darken-4">
-							{props.user.name}
-							<button class="btn waves-effect waves-light right">
-								Follow
-								<i class="material-icons right">loyalty</i>
-							</button>
-						</span>
-						<p>{props.user.description}</p>
+						<div className="card-content user-content">
+							<span className="card-title activator grey-text text-darken-4">
+								{this.props.account.name}
+								<button className="btn right" onClick={this.handleFollow}>
+									Follow
+									<i className="material-icons right">loyalty</i>
+								</button>
+							</span>
+							<p>{this.props.account.description}</p>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-	);
+		);
+	}
+}
+
+const mapStateToProps = state => {
+	console.log(state);
+	return {
+		
+		currentUser: state.currentUser.user
+	};
 };
 
-export default UserCard;
+export default connect(mapStateToProps)(withRouter(UserCard));

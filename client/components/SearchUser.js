@@ -157,7 +157,7 @@ class SearchUser extends Component {
 						{isLoading ? <p>Loading...</p> : <></>}
 					</div>
 					{user ? (
-						<UserCard user={user} />
+						<UserCard account={user} />
 					) : null}
 					{tweets ? (
 						<>

@@ -39,8 +39,9 @@ class Login extends Component {
       })
       .then(res => res.json())
       .then(data => {
-        console.log(data, "login data");
         if(data.success){
+					console.log(data);
+					
           localStorage.setItem("jwt", data.token);
           this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data });
           this.setState({ user: {} });
@@ -83,7 +84,7 @@ class Login extends Component {
 							value={this.state.user.password}
 						/>
 						<button
-							className=" waves-effect waves-light btn"
+							className="  btn"
 							onClick={this.handleSubmit}
 						>
 							Login
@@ -96,7 +97,7 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-	console.log(state, "login mapStateToProps");
+	// console.log(state, "login mapStateToProps");
 	return { state };
 }
 

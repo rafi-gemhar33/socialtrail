@@ -104,7 +104,7 @@ class SignUp extends Component {
 							value={this.state.user.confirmPassword}
 						/>
 						<button
-							className=" waves-effect waves-light btn"
+							className="  btn"
 							onClick={this.handleSubmit}
 						>
 							SignUp
