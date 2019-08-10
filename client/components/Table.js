@@ -24,9 +24,9 @@ class Table extends Component {
 							return (
 									<tr key={day[0]}>
 										<td>{day[0]}</td>
-										<td>{this.props.user.friends_count}</td>
-										<td>{this.props.user.followers_count}</td>
-										<td>{this.props.user.statuses_count}</td>
+										<td>{this.props.account.friends_count}</td>
+										<td>{this.props.account.followers_count}</td>
+										<td>{this.props.account.statuses_count}</td>
 										<td>{day[1].totalLikes}</td>
 										<td>{day[1].totalRT}</td>
 									</tr>

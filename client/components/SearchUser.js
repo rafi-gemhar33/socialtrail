@@ -11,57 +11,57 @@ class SearchUser extends Component {
 		message: "pre filled for testing",
 		tweets: null,
 		isLoading: false,
-		user: null
+		account: null
 	};
 
 	handleClick = () => {
 		console.log("in handle click");
 		event.preventDefault();
 		//Testing data
-		// this.setState({ tweets: testTweets, isLoading: false, user: testUser });
-		if (this.state.username.length > 0) {
-			this.setState({ isLoading: true });
-			fetch("http://localhost:3000/api/v1/twitter", {
-				method: "POST", // *GET, POST, PUT, DELETE, etc.
-				mode: "cors", // no-cors, cors, *same-origin
-				cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-				credentials: "same-origin", // include, *same-origin, omit
-				headers: {
-					"Content-Type": "application/json"
-					// 'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				redirect: "follow", // manual, *follow, error
-				referrer: "no-referrer", // no-referrer, *client
-				body: JSON.stringify({ username: this.state.username })
-			})
-				.then(response => {
-					return response.json();
-				})
-				.then(res => {
-					if (res.success) {
-						let { sortedTweets, user } = this.sortByDays(res.tweets);
-						console.log(sortedTweets, user);
+		this.setState({ tweets: testTweets, isLoading: false, account: testUser });
+		// if (this.state.username.length > 0) {
+		// 	this.setState({ isLoading: true });
+		// 	fetch("http://localhost:3000/api/v1/twitter", {
+		// 		method: "POST", // *GET, POST, PUT, DELETE, etc.
+		// 		mode: "cors", // no-cors, cors, *same-origin
+		// 		cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+		// 		credentials: "same-origin", // include, *same-origin, omit
+		// 		headers: {
+		// 			"Content-Type": "application/json"
+		// 			// 'Content-Type': 'application/x-www-form-urlencoded',
+		// 		},
+		// 		redirect: "follow", // manual, *follow, error
+		// 		referrer: "no-referrer", // no-referrer, *client
+		// 		body: JSON.stringify({ username: this.state.username })
+		// 	})
+		// 		.then(response => {
+		// 			return response.json();
+		// 		})
+		// 		.then(res => {
+		// 			if (res.success) {
+		// 				let { sortedTweets, account } = this.sortByDays(res.tweets);
+		// 				console.log(sortedTweets, account);
 
-						this.setState({ tweets: sortedTweets, isLoading: false, user });
-					} else {
-						console.log(res);
-						this.setState({
-							message: "it seems the username does not exist check again",
-							isLoading: false
-						});
-					}
-				});
-		} else {
-			this.setState({
-				message: "why the hell are you searching for a empty username"
-			});
-		}
+		// 				this.setState({ tweets: sortedTweets, isLoading: false, account });
+		// 			} else {
+		// 				console.log(res);
+		// 				this.setState({
+		// 					message: "it seems the username does not exist check again",
+		// 					isLoading: false
+		// 				});
+		// 			}
+		// 		});
+		// } else {
+		// 	this.setState({
+		// 		message: "why the hell are you searching for a empty username"
+		// 	});
+		// }
 	};
 
 	sortByDays(tweets) {
 		console.log("in sortByDays method");
 
-		const { user } = tweets[0];
+		const { account } = tweets[0];
 
 		let tweetsObj = tweets.reduce((acc, curr) => {
 			let day = curr.created_at.slice(4, 11) + curr.created_at.slice(-4);
@@ -92,7 +92,7 @@ class SearchUser extends Component {
 					acc[day].totalLikes / acc[day].tweets.length
 				).toFixed(2);
 				acc[day].avgEngagement = +(
-					((acc[day].totalRT + acc[day].totalLikes) / user.followers_count) *
+					((acc[day].totalRT + acc[day].totalLikes) / account.followers_count) *
 					100
 				).toFixed(2);
 			} else {
@@ -107,7 +107,7 @@ class SearchUser extends Component {
 					acc[day].totalLikes / acc[day].tweets.length
 				).toFixed(2);
 				acc[day].avgEngagement = +(
-					((acc[day].totalRT + acc[day].totalLikes) / user.followers_count) *
+					((acc[day].totalRT + acc[day].totalLikes) / account.followers_count) *
 					100
 				).toFixed(2);
 			}
@@ -122,7 +122,7 @@ class SearchUser extends Component {
 		sortedTweets.sort((a, b) => {
 			return new Date(b[0]).getTime() - new Date(a[0]).getTime();
 		});
-		return { user, tweetsObj, sortedTweets };
+		return { account, tweetsObj, sortedTweets };
 	}
 
 	handleChange = ev => {
@@ -130,7 +130,7 @@ class SearchUser extends Component {
 	};
 
 	render() {
-		const { username, message, isLoading, user, tweets } = this.state;
+		const { username, message, isLoading, account, tweets } = this.state;
 		return (
 			<div className="row">
 				<div className="col s8 offset-s2">
@@ -158,11 +158,11 @@ class SearchUser extends Component {
 						</form>
 					</div>
 					{isLoading ? <p>Loading...</p> : <></>}
-					{user ? <UserCard account={user} /> : null}
+					{account ? <UserCard account={account} /> : null}
 					{tweets ? (
 						<>
-							<Chart chartData={tweets} user={user} />
-							<Table tableData={tweets} user={user} />
+							<Chart chartData={tweets} account={account} />
+							<Table tableData={tweets} account={account} />
 						</>
 					) : null}
 				</div>

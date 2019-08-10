@@ -46,7 +46,7 @@ class Chart extends Component {
 
 	setUserData = key => {
 		let labels = this.props.chartData.map(a => a[0]);
-		let data = labels.map(() => this.props.user[key]);
+		let data = labels.map(() => this.props.account[key]);
 		let chartData = {
 			labels,
 			datasets: [

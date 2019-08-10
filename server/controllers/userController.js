@@ -92,4 +92,12 @@ module.exports = {
 		console.log('rendered delete');
 	},
 
+	followTwiter:(req, res) => {
+		res.json({route: "twitter-follow"})
+	},
+
+	unFollowTwiter: (req, res) => {
+		res.json({route: "twitter-unFollow"})
+	},
+
 }
