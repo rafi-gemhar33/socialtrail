@@ -1,17 +1,18 @@
-import React,{Component} from "react";
-import { connect } from "react-redux";
-import {withRouter} from "react-router-dom"
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
 class UserCard extends Component {
-	constructor(props){
-		super(props)
+	constructor(props) {
+		super(props);
 	}
-	handleFollow =() => {
-		if(this.props.currentUser){
+	handleFollow = () => {
+		if (this.props.currentUser) {
 			console.log(this.props.currentUser.user);
 		} else {
 			this.props.history.push('/login');
 		}
-	}
+	};
 	render() {
 		return (
 			<div className="row">
@@ -22,7 +23,7 @@ class UserCard extends Component {
 							<div className="dp-box">
 								<img
 									className="dp circle responsive-img"
-									src={this.props.account.profile_image_url.replace("normal", "400x400")}
+									src={this.props.account.profile_image_url.replace('normal', '400x400')}
 								/>
 							</div>
 						</div>

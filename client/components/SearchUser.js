@@ -5,6 +5,7 @@ import Chart from './Chart';
 import Table from './Table';
 import UserCard from './UserCard';
 import { testTweets, testUser } from '../../tweet';
+
 class SearchUser extends Component {
 	state = {
 		username: 'dprank',
@@ -108,6 +109,11 @@ class SearchUser extends Component {
 		this.setState({ username: ev.target.value, message: '' });
 	};
 
+	dropdownChanged = e => {
+		console.log(e, 'dropdownChanged');
+		this.setState({ selectedId: e.target.value });
+	};
+
 	render() {
 		const { username, message, isLoading, user, tweets } = this.state;
 		return (
@@ -116,8 +122,13 @@ class SearchUser extends Component {
 					<div className="form-container row">
 						<form className="col s8 offset-s2">
 							{
-								<div class="input-field col s12">
-									<select>
+								<div
+									className="input-field col s12"
+									style={{
+										padding: 0
+									}}
+								>
+									<select value={this.selectedId} onChange={this.dropdownChanged}>
 										<option value="" disabled selected>
 											Choose your option
 										</option>
@@ -125,15 +136,8 @@ class SearchUser extends Component {
 										<option value="Instagram">Instagram</option>
 										<option value="Youtube">Youtube</option>
 									</select>
+									<label>Materialize Select</label>
 								</div>
-
-								/*<div className="input-field col s12">
-									<select>
-										<option>Twitter</option>
-										<option>Instagram</option>
-									</select>
-									<label>Social media</label>
-								</div>*/
 							}
 							<div>
 								<input type="text" placeholder="username" value={username} onChange={this.handleChange} />

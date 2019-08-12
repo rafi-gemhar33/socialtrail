@@ -3,16 +3,14 @@
 
 <head>
   <title><%= title %></title>
-  <link rel="shortcut icon" href="https://cdn2.iconfinder.com/data/icons/nodejs-1/512/nodejs-512.png">
-  
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet" />
-
+  
   <link rel='stylesheet' href="/static/bundle.css" />
 
   <meta content="width=device-width, initial-scale=1" name="viewport" />
 
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+   <%/* Material Icons */%>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 
   <%/* Global site tag (gtag.js) - Google Analytics */%>
@@ -21,8 +19,19 @@
 <body>
   <div id="root"></div>
   <script src="/static/bundle.js"></script>
+ 
+  <%/* matirialize script */%>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+  <%/* jquery script */%>
+  <script>
+    $(document).ready(function(){
+      $('select').formSelect();
+    });
+  </script>
+
 
 </body>
 
