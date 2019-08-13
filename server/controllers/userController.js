@@ -113,4 +113,12 @@ module.exports = {
 		});
 	},
 
+	followTwiter:(req, res) => {
+		res.json({route: "twitter-follow"})
+	},
+
+	unFollowTwiter: (req, res) => {
+		res.json({route: "twitter-unFollow"})
+	},
+
 }

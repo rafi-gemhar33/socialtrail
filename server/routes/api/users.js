@@ -9,6 +9,8 @@ router.post('/register', userController.signUp);
 router.put('/update', userController.updateUser);
 router.delete('/delete', userController.deleteUser);
 router.get('/', auth.verifyToken, userController.getAllUsers);
+router.post('/twitter/follow', auth.verifyToken, userController.followTwiter);
+router.delete('/twitter/follow', auth.verifyToken, userController.unFollowTwiter);
 router.get('/:id', userController.getUser);
 
 module.exports = router;
