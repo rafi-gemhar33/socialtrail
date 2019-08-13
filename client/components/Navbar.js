@@ -10,7 +10,6 @@ class Navbar extends Component {
 
 	render() {
 		const { isAuthInProgress } = this.props.user;
-		// console.log(this.props.user.isAuthInProgress);
 		return (
 			<div className="navbar-box">
 				<nav className="">
