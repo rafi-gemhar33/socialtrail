@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import validateEmail from "../utils/validateEmail";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import validateEmail from '../utils/validateEmail';
 
-const url = "http://localhost:3000/api/v1/";
+const url = 'http://localhost:3000/api/v1/';
 
 class Login extends Component {
 	state = {
 		user: {
-			email: "",
-			password: ""
+			email: '',
+			password: ''
 		},
-		error: ""
+		error: ''
 	};
 
 	handleChange = e => {
@@ -31,35 +31,35 @@ class Login extends Component {
 
 		if (isValidEmail && password.length >= 6) {
 			fetch(`${url}users/login`, {
-				method: "POST",
+				method: 'POST',
 				headers: {
-					"Content-Type": "application/json"
+					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(this.state.user)
 			})
 				.then(res => res.json())
 				.then(data => {
 					if (data.success) {
-						localStorage.setItem("jwt", data.token);
-						this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data });
+						localStorage.setItem('jwt', data.token);
+						this.props.dispatch({ type: 'USER_LOGIN_SUCCESS', data: data });
 						this.setState({ user: {} });
-						this.props.location.navObj.activeNav("home");
-						this.props.history.push("/");
+						// this.props.location.navObj.activeNav('home');
+						this.props.history.push('/');
 					} else {
-						this.setState({ error: "Wrong email/password" });
+						this.setState({ error: 'Wrong email/password' });
 					}
 				})
 				.catch(err => {
-					console.log(err, this, "catch error");
-					this.setState({ error: "Wrong email address" });
-					setTimeout(() => this.setState({ error: "" }), 1000);
+					console.log(err, 'catch error');
+					this.setState({ error: 'Wrong email address' });
+					setTimeout(() => this.setState({ error: '' }), 1000);
 				});
 		} else if (!isValidEmail) {
-			this.setState({ error: "Invalid email address" });
+			this.setState({ error: 'Invalid email address' });
 		} else if (password.length < 6) {
-			this.setState({ error: "Password length is too short" });
+			this.setState({ error: 'Password length is too short' });
 		} else {
-			this.setState({ error: "Please fill all the feilds" });
+			this.setState({ error: 'Please fill all the feilds' });
 		}
 	};
 

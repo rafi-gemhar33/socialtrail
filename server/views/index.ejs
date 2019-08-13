@@ -1,25 +1,28 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title><%= title %></title>
 
-<head>
-  <title><%= title %></title>
-  <link rel="shortcut icon" href="https://cdn2.iconfinder.com/data/icons/nodejs-1/512/nodejs-512.png">
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet" />
-  <link rel='stylesheet' href="/static/bundle.css" />
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <%/* Google fonts */%>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet" />
+    
+    <%/* bundle css */%>
+    <link rel='stylesheet' href="/static/bundle.css" />
+    
+    <%/* favicon icon */%>
+    <link rel="shortcut icon" type="image/png/ico" href="media/images/logo.png" />
 
-  <%/* matirial ui dependencies*/%>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Bungee+Inline&display=swap" /> 
+    <%/* meta link for responsive layout */%>
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  </head>
 
+  <body>
 
-  <%/* Global site tag (gtag.js) - Google Analytics */%>
-</head>
+    <div id="root"></div>
 
-<body>
-  <div id="root"></div>
-  <script src="/static/bundle.js"></script>
-</body>
+    <%/* bundle.js script */%>
+    <script src="/static/bundle.js"></script>
 
+  </body>
 </html>

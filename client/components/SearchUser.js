@@ -1,21 +1,30 @@
-import React, { Component } from "react";
-// import axios from "axios";
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
-import Chart from "./Chart";
-import Table from "./Table";
-import UserCard from "./UserCard";
-import { testTweets, testUser } from "../../tweet";
+import Chart from './Chart';
+import Table from './Table';
+import UserCard from './UserCard';
+import { testTweets, testUser } from '../../tweet';
+import 'materialize-css/dist/css/materialize.min.css';
+import M from 'materialize-css';
+
 class SearchUser extends Component {
 	state = {
-		username: "dprank",
-		message: "pre filled for testing",
+		username: 'dprank',
+		message: 'pre filled for testing',
 		tweets: null,
 		isLoading: false,
-		account: null
+		account: null,
+		catagory: ''
 	};
 
+	componentDidMount() {
+		// Auto initialize all the things!
+		M.AutoInit();
+	}
+
 	handleClick = () => {
-		console.log("in handle click");
+		console.log('in handle click');
 		event.preventDefault();
 		//Testing data
 		this.setState({ tweets: testTweets, isLoading: false, account: testUser });
@@ -59,20 +68,13 @@ class SearchUser extends Component {
 	};
 
 	sortByDays(tweets) {
-		console.log("in sortByDays method");
+		console.log('in sortByDays method');
 
 		const { account } = tweets[0];
 
 		let tweetsObj = tweets.reduce((acc, curr) => {
 			let day = curr.created_at.slice(4, 11) + curr.created_at.slice(-4);
-			const {
-				created_at,
-				id_str,
-				text,
-				truncated,
-				retweet_count,
-				favorite_count
-			} = curr;
+			const { created_at, id_str, text, truncated, retweet_count, favorite_count } = curr;
 			let trimmedTweet = {
 				created_at,
 				id_str,
@@ -126,7 +128,12 @@ class SearchUser extends Component {
 	}
 
 	handleChange = ev => {
-		this.setState({ username: ev.target.value, message: "" });
+		this.setState({ username: ev.target.value, message: '' });
+	};
+
+	dropdownChanged = e => {
+		console.log(e, 'dropdownChanged');
+		this.setState({ catagory: e.target.value });
 	};
 
 	render() {
@@ -136,21 +143,26 @@ class SearchUser extends Component {
 				<div className="col s8 offset-s2">
 					<div className="form-container row">
 						<form className="col s8 offset-s2">
-							<div className="input-field">
-								<select className="browser-default">
-									<option>Twitter</option>
-									<option>Instagram</option>
-								</select>
-								{/* <label>Social media</label> */}
-							</div>
+							{
+								<div
+									className="input-field col s12"
+									style={{
+										padding: 0
+									}}
+								>
+									<select ref="dropdown" value={this.state.catagory} onChange={this.dropdownChanged}>
+										<option value="" disabled>
+											Choose your option
+										</option>
+										<option value="twitter">Twitter</option>
+										<option value="instagram">Instagram</option>
+										<option value="youtube">Youtube</option>
+									</select>
+								</div>
+							}
 							<div>
-								<input
-									type="text"
-									placeholder="username"
-									value={username}
-									onChange={this.handleChange}
-								/>
-								<button className="btn " onClick={this.handleClick}>
+								<input type="text" placeholder="username" value={username} onChange={this.handleChange} />
+								<button className="waves-effect waves-light btn" onClick={this.handleClick}>
 									Search
 								</button>
 							</div>

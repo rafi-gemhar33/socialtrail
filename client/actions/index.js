@@ -1,5 +1,4 @@
 // import axios from 'axios';
-
 const url = 'http://localhost:3000/api/v1';
 
 // const setTokenToAxios = (token) => {
@@ -7,7 +6,8 @@ const url = 'http://localhost:3000/api/v1';
 //   axios.defaults.headers.Authorization = newToken;
 // }
 
-export const getCurrentUser = (token) => {
+export const getCurrentUser = (token, history) => {
+  // console.log(history, "action history");
   return (dispatch => {
     fetch(`${url}/users/me`,{
       method: "GET",
@@ -23,20 +23,21 @@ export const getCurrentUser = (token) => {
         dispatch({
           type: 'USER_LOGIN_SUCCESS',
           data
-        })
+        });
+        history.push('/');
       }
     })
     .catch(err => {
       console.log(err, "action error");
-      // dispatch({type: 'USER_LOGIN_FAILED'})
+      dispatch({type: 'USER_LOGIN_FAILED'})
     })
   })
 }
 
-export const noToken = () => {
-  return(dispatch => {
-    dispatch({
-      type: 'NO_TOKEN'
-    })
-  })
-}
+// export const noToken = () => {
+//   return(dispatch => {
+//     dispatch({
+//       type: 'NO_TOKEN'
+//     })
+//   })
+// }

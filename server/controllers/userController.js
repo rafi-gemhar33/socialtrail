@@ -5,6 +5,13 @@ const bcrypt = require('bcrypt');
 module.exports = {
 	getUser: (req,res) => {
 		console.log('rendered1');
+		User.findOne({ _id: req.params.id }, (err, user) => {
+			if(err){
+				return res.status(500).json({ error: err, success: false, massege: "Server error" });
+			} else if(user){
+				return res.status(200).json({ success: true, user });
+			}
+		})
 	},
 
 	getAllUsers: (req,res) => {
@@ -85,11 +92,25 @@ module.exports = {
 	},
 
 	updateUser: (req,res) => {
-		console.log('rendered update');
+		console.log(req.params,'update user');
+		User.findOneAndUpdate({ _id: req.params.id }, req.body, {new : true}, (err, user) => {
+			if(err){
+				return res.status(500).json({ error: err, success: false, massege: "Server error" });
+			} else if(user){
+				return res.status(200).json({ success: true, massege: "User updated succesfully" });
+			}
+		})
 	},
 
 	deleteUser: (req,res) => {
-		console.log('rendered delete');
+		console.log(req.params,'update user');
+		User.findOneAndDelete({ _id: req.params.id }, req.body, {new : true}, (err, user) => {
+			if(err){
+				return res.status(500).json({ error: err, success: false, massege: "Server error" });
+			} else if(user){
+				return res.status(200).json({ success: true, massege: "User deleted succesfully" });
+			}
+		});
 	},
 
 	followTwiter:(req, res) => {
