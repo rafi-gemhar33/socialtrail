@@ -23,10 +23,16 @@ const UserSchema = new Schema({
 		min: 6,
 		max: 20
 	},
+	followingAccounts: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: "TwitterAccount",
+		}
+	]
 
 }, { timestamps: true });
 
-UserSchema.pre('save', (next) => {
+UserSchema.pre('save', function (next) {
 	if(this.password && this.isModified('password')){
 		this.password = bcrypt.hashSync(this.password, salt);
 		next();
