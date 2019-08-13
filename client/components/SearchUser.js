@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-// import axios from "axios";
+import ReactDOM from 'react-dom';
 
 import Chart from './Chart';
 import Table from './Table';
 import UserCard from './UserCard';
 import { testTweets, testUser } from '../../tweet';
+import 'materialize-css/dist/css/materialize.min.css';
+import M from 'materialize-css';
 
 class SearchUser extends Component {
 	state = {
@@ -12,8 +14,14 @@ class SearchUser extends Component {
 		message: 'pre filled for testing',
 		tweets: null,
 		isLoading: false,
-		user: null
+		user: null,
+		catagory: ''
 	};
+
+	componentDidMount() {
+		// Auto initialize all the things!
+		M.AutoInit();
+	}
 
 	handleClick = () => {
 		console.log('in handle click');
@@ -111,7 +119,7 @@ class SearchUser extends Component {
 
 	dropdownChanged = e => {
 		console.log(e, 'dropdownChanged');
-		this.setState({ selectedId: e.target.value });
+		this.setState({ catagory: e.target.value });
 	};
 
 	render() {
@@ -128,15 +136,14 @@ class SearchUser extends Component {
 										padding: 0
 									}}
 								>
-									<select value={this.selectedId} onChange={this.dropdownChanged}>
-										<option value="" disabled selected>
+									<select ref="dropdown" value={this.state.catagory} onChange={this.dropdownChanged}>
+										<option value="" disabled>
 											Choose your option
 										</option>
-										<option value="Twitter">Twitter</option>
-										<option value="Instagram">Instagram</option>
-										<option value="Youtube">Youtube</option>
+										<option value="twitter">Twitter</option>
+										<option value="instagram">Instagram</option>
+										<option value="youtube">Youtube</option>
 									</select>
-									<label>Materialize Select</label>
 								</div>
 							}
 							<div>
