@@ -1,111 +1,127 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import validateEmail from '../utils/validateEmail';
-
-console.log(validateEmail, "validateEmail SignUp");
+import validateEmail from "../utils/validateEmail";
+const url = "http://localhost:3000/api/v1/";
 
 class SignUp extends Component {
-  state = {
-    user: {
-      userName: "",
-      email: "",
-      password: "",
-      confirmPassword: ""
-    }
-  }
+	state = {
+		user: {
+			userName: "",
+			email: "",
+			password: "",
+			confirmPassword: ""
+		},
+		error: ""
+	};
 
-  handleChange = (e) => {
-    const { name, value } = e.target;
-    this.setState({ 
-      user: {
-        ...this.state.user,
-        [name]: value
-      }
-    })
-  }
+	handleChange = e => {
+		const { name, value } = e.target;
+		this.setState({
+			user: {
+				...this.state.user,
+				[name]: value
+			}
+		});
+	};
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    const { 
-      userName,
-      email,
-      password,
-      confirmPassword
-    } = this.state.user;
+	handleSubmit = e => {
+		e.preventDefault();
+		const { userName, email, password, confirmPassword } = this.state.user;
 
-    const isValidEmail = email.include('.com');
+		const isValidEmail = validateEmail(email);
 
-    console.log(isValidEmail, "check mail demo...");
+		console.log(isValidEmail, "check mail demo...");
 
-    if(userName && email && isValidEmail && password.length >= 6 && confirmPassword.length >= 6){
-      if(password === confirmPassword){
-        fetch('http://localhost:3000/api/v1/users/register',{
-          method: "POST",
-          headers: {
-            "Content-type", 'appliction/json'
-          },
-          body: JSON.stringify(this.state.user)
-        })
-        .then((res) => {
-          console.log(res, "login data");
-          if(res.data.success){
-            localStorage.setItem("jwt", res.data.token);
-            this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: res.data });
-            this.setState({ user: {} });
-            this.props.history.push('/');
-          }
-        })
-        .catch(function (err) {
-          console.log(err, "catch error");
-          this.setState({ error: "Wrong email Address" });
-          setTimeout(() => this.setState({ error: "" }), 1000);
-        });
-      } else {
-        this.setState({ error: "Email did not match" });
-      }
-    } else {
-      this.setState({ error: "Please fill all the feilds" });
-    }
-  }
+		if (
+			userName &&
+			email &&
+			isValidEmail &&
+			password.length >= 6 &&
+			confirmPassword.length >= 6
+		) {
+			if (password === confirmPassword) {
+				fetch(`${url}users/register`, {
+					method: "POST",
+					mode: "cors",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify(this.state.user)
+				})
+					.then(res => res.json())
+					.then(data => {
+						console.log(data, "signup data");
+						if (data.success) {
+							// localStorage.setItem("jwt", data.token);
+							this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data });
+							this.setState({ user: {} });
+							this.props.history.push("/");
+						}
+					})
+					.catch(function(err) {
+						console.log(err, "catch error");
+						// this.setState({ error: "Wrong email Address" });
+						// setTimeout(() => this.setState({ error: "" }), 1000);
+					});
+			} else {
+				this.setState({ error: "password did not match" });
+			}
+		} else {
+			this.setState({ error: "Please fill all the feilds" });
+		}
+	};
 
-  render() {
-    return (
-      <form>
-        <input
-          type="text"
-          name="userName"
-          placeholder="Username"
-          onChange={ this.handleChange }
-          value={ this.state.user.userName }
-          />
-        <input
-          type="text"
-          name="email"
-          placeholder="Email address"
-          onChange={ this.handleChange }
-          value={ this.state.user.email }
-          />
-        <input
-          type="password"
-          name="password"
-          placeholder="password"
-          onChange={ this.handleChange }
-          value={ this.state.user.password }
-          />
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          onChange={ this.handleChange }
-          value={ this.state.user.confirmPassword }
-          />
-        <button onSubmit={ this.handleSubmit }>
-          SignUp
-        </button>
-      </form>
-    );
-  }
+	render() {
+		const { error } = this.state;
+		return (
+			<div className="row">
+				<div className=" col s8 offset-s2">
+					<div className="form-container row">
+						<form className="col s8 offset-s2">
+							<p className="error">{error}</p>
+							<input
+								type="text"
+								name="userName"
+								placeholder="Username"
+								onChange={this.handleChange}
+								value={this.state.user.userName}
+							/>
+							<input
+								type="text"
+								name="email"
+								placeholder="Email address"
+								onChange={this.handleChange}
+								value={this.state.user.email}
+							/>
+							<input
+								type="password"
+								name="password"
+								placeholder="password"
+								onChange={this.handleChange}
+								value={this.state.user.password}
+							/>
+							<input
+								type="password"
+								name="confirmPassword"
+								placeholder="Confirm Password"
+								onChange={this.handleChange}
+								value={this.state.user.confirmPassword}
+							/>
+							<button className=" btn" onClick={this.handleSubmit}>
+								SignUp
+							</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		);
+	}
 }
 
-export default SignUp;
+function mapStateToProps(state) {
+	// console.log(state, "register mapStateToProps");
+	return { state };
+}
+
+export default connect(mapStateToProps)(SignUp);

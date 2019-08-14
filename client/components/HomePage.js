@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import Login from './Login';
+import { Link } from 'react-router-dom';
+
+import SearchUser from './SearchUser';
+import Canvas from './Canvas';
 
 const HomePage = () => {
-  return (
-    <div>
-    	<h1>Social Media Tracker</h1>
-    	<login />
-    </div>
-  );
-}
+	return (
+		<div>
+			<SearchUser />
+		</div>
+	);
+};
 
 export default HomePage;

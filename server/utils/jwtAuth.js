@@ -8,16 +8,17 @@ module.exports = {
 
   verifyToken: function (req, res, next) {
     const token = req.headers.Authorization || req.headers.authorization || '';
-
     if(!token) {
       return res.status(401).send({ message: 'Please authenticate'});
+    } else if(token){
+      jwt.verify(token, process.env.JWT_SIGN, (err, decoded) => {
+        if(err){
+          return res.status(500).json({ error: err, success: false, massege: "Invakid token" });
+        } else if(decoded && decoded.id) {
+            req.user = decoded;
+            next();
+        } 
+      })
     }
-
-    jwt.verify(token, process.env.JWT_SIGN, function (err, decoded) {
-      if(decoded && decoded._id) {
-        req.user = decoded;
-        next();
-      }
-    })
   }
 }
