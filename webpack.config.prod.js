@@ -1,10 +1,29 @@
 var webpack = require('webpack');
 var path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-  mode: 'development',
-  devtool: 'inline-source-map',
+
+};
+module.exports = {
+  optimization: {
+    minimizer: [
+      // we specify a custom UglifyJsPlugin here to get source maps in production
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        uglifyOptions: {
+          compress: false,
+          ecma: 6,
+          mangle: true
+        },
+        sourceMap: true
+      })
+    ]
+  },
+  mode: 'production',
+  devtool: 'source-map',
   entry: [
     './client/index.js',
   ],
@@ -45,12 +64,12 @@ module.exports = {
     publicPath: '/static/'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(), //remove
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('development') //prod
+        'NODE_ENV': JSON.stringify('production')
       }
-    }),//use plugin for compression
+    }),
     new MiniCssExtractPlugin({
       filename: "bundle.css",
     })
