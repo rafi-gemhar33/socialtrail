@@ -10,7 +10,6 @@ class UserCard extends Component {
 		const url = "http://localhost:3000/api/v1//users/twitter/follow";
 		const token = localStorage.getItem("jwt") || "";
 		if (this.props.currentUser) {
-			// console.log(this.props.currentUser.user);
 			fetch(`${url}`, {
 				method: method,
 				headers: {
@@ -31,7 +30,7 @@ class UserCard extends Component {
 				<div className="col s12 m12">
 					<div className="card ">
 						<div className="card-image">
-							<img src={this.props.account.profile_banner_url} />
+							<img className ="banner" src={this.props.account.profile_banner_url||"https://images.unsplash.com/photo-1488490579377-8ea9a560f5cd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=500"} />
 							<div className="dp-box">
 								<img
 									className="dp circle responsive-img"

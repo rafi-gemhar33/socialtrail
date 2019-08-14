@@ -51,7 +51,7 @@ class SignUp extends Component {
 				})
 					.then(res => res.json())
 					.then(data => {
-						console.log(data, "signup data");
+						// console.log(data, "signup data");
 						if (data.success) {
 							// localStorage.setItem("jwt", data.token);
 							this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data });

@@ -6,7 +6,7 @@ const TweetSchema = new Schema(
 		createdDate: {
 			type: String
 		},
-		tweetId: {
+		id_str: {
 			type: String,
 			unique: true,
 			require: true
@@ -19,11 +19,11 @@ const TweetSchema = new Schema(
 		truncated: {
 			type: Boolean
 		},
-		retweets: {
-			type: number
+		retweet_count: {
+			type: Number
 		},
-		likes: {
-			type: number
+		favorite_count: {
+			type: Number
 		}
 	},
 	{ timestamps: true }

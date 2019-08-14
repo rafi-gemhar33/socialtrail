@@ -17,7 +17,6 @@ class App extends Component {
   };
 
   componentDidMount() {
-    // console.log(this.props.history)
     var token = localStorage.getItem('jwt') || '';
     if (token) {
       // this.setState({token: token})
@@ -28,7 +27,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props.currentUser, 'app user');
     return (
       <div>
         <Navbar />
@@ -47,7 +45,6 @@ class App extends Component {
 }
 
 const mapStateToProps = state => {
-  //console.log(state, 'app map state');
   return {
     currentUser: state.currentUser.user
   };

@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 class CurrentUser extends React.Component {
 	render() {
 		const { user } = this.props.user;
-		console.log(user, 'CurrentUser user');
 		return (
 			<div
 				style={{
