@@ -9,8 +9,11 @@ const helmet = require('helmet');
 const expressStaticGzip = require('express-static-gzip');
 const mongoose = require('mongoose');
 
+const CronJob = require('cron').CronJob
+
 const indexRouter = require('./server/routes/index');
-const apiRouter = require('./server/routes/api')
+const apiRouter = require('./server/routes/api');
+const updateTwitterAccount = require('./server/utils/cronjob');
 
 const app = express();
 
@@ -68,6 +71,10 @@ if (process.env.NODE_ENV === 'development') {
 // Route handler
 app.use('/api/v1', apiRouter) // api route handler
 app.use('/*', indexRouter); // react handler
+
+new CronJob('1 0 0 * * *', function() {
+  updateTwitterAccount.updateAccount();
+}, null, true, 'Asia/Kolkata');
 
 
 // catch 404 and forward to error handler

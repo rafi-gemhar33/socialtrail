@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
 
-import Chart from './Chart';
-import Table from './Table';
-import UserCard from './UserCard';
-import { testTweets, testUser } from '../../tweet';
-import 'materialize-css/dist/css/materialize.min.css';
-import M from 'materialize-css';
+import Chart from "./Chart";
+import Table from "./Table";
+import UserCard from "./UserCard";
+import { testTweets, testUser } from "../../tweet";
+import "materialize-css/dist/css/materialize.min.css";
+import M from "materialize-css";
 
 class SearchUser extends Component {
 	state = {
@@ -15,7 +15,7 @@ class SearchUser extends Component {
 		tweets: null,
 		isLoading: false,
 		account: null,
-		catagory: ''
+		catagory: ""
 	};
 
 	componentDidMount() {
@@ -24,57 +24,89 @@ class SearchUser extends Component {
 	}
 
 	handleClick = () => {
-		console.log('in handle click');
+
 		event.preventDefault();
 		//Testing data
-		this.setState({ tweets: testTweets, isLoading: false, account: testUser });
-		// if (this.state.username.length > 0) {
-		// 	this.setState({ isLoading: true });
-		// 	fetch("http://localhost:3000/api/v1/twitter", {
-		// 		method: "POST", // *GET, POST, PUT, DELETE, etc.
-		// 		mode: "cors", // no-cors, cors, *same-origin
-		// 		cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-		// 		credentials: "same-origin", // include, *same-origin, omit
-		// 		headers: {
-		// 			"Content-Type": "application/json"
-		// 			// 'Content-Type': 'application/x-www-form-urlencoded',
-		// 		},
-		// 		redirect: "follow", // manual, *follow, error
-		// 		referrer: "no-referrer", // no-referrer, *client
-		// 		body: JSON.stringify({ username: this.state.username })
-		// 	})
-		// 		.then(response => {
-		// 			return response.json();
-		// 		})
-		// 		.then(res => {
-		// 			if (res.success) {
-		// 				let { sortedTweets, account } = this.sortByDays(res.tweets);
-		// 				console.log(sortedTweets, account);
+		// this.setState({ tweets: testTweets, isLoading: false, account: testUser });
+		if (this.state.username.length > 0) {
+			this.setState({ isLoading: true });
 
-		// 				this.setState({ tweets: sortedTweets, isLoading: false, account });
-		// 			} else {
-		// 				console.log(res);
-		// 				this.setState({
-		// 					message: "it seems the username does not exist check again",
-		// 					isLoading: false
-		// 				});
-		// 			}
-		// 		});
-		// } else {
-		// 	this.setState({
-		// 		message: "why the hell are you searching for a empty username"
-		// 	});
-		// }
+			fetch("http://localhost:3000/api/v1/twitter/account", {
+				method: "POST", // *GET, POST, PUT, DELETE, etc.
+				mode: "cors", // no-cors, cors, *same-origin
+				cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+				credentials: "same-origin", // include, *same-origin, omit
+				headers: {
+					"Content-Type": "application/json"
+					// 'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				redirect: "follow", // manual, *follow, error
+				referrer: "no-referrer", // no-referrer, *client
+				body: JSON.stringify({ username: this.state.username })
+			})
+				.then(response => {
+					return response.json();
+				})
+				.then(res => {
+					if (res.success) {
+						const account = res.account;
+						this.setState({ account });
+					} else {
+						this.setState({
+							message: "it seems the username does not exist check again",
+							isLoading: false
+						});
+					}
+				});
+
+			fetch("http://localhost:3000/api/v1/twitter/tweets", {
+				method: "POST", // *GET, POST, PUT, DELETE, etc.
+				mode: "cors", // no-cors, cors, *same-origin
+				cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+				credentials: "same-origin", // include, *same-origin, omit
+				headers: {
+					"Content-Type": "application/json"
+					// 'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				redirect: "follow", // manual, *follow, error
+				referrer: "no-referrer", // no-referrer, *client
+				body: JSON.stringify({ username: this.state.username })
+			})
+				.then(response => {
+					return response.json();
+				})
+				.then(res => {
+					if (res.success) {
+						let { sortedTweets, account } = this.sortByDays(res.tweets);
+						this.setState({ tweets: sortedTweets, isLoading: false });
+					} else {
+						this.setState({
+							message: "it seems the username does not exist check again",
+							isLoading: false
+						});
+					}
+				});
+		} else {
+			this.setState({
+				message: "why the hell are you searching for a empty username"
+			});
+		}
 	};
 
 	sortByDays(tweets) {
-		console.log('in sortByDays method');
-
-		const { account } = tweets[0];
+		
+		const account = this.state.account || {};
 
 		let tweetsObj = tweets.reduce((acc, curr) => {
 			let day = curr.created_at.slice(4, 11) + curr.created_at.slice(-4);
-			const { created_at, id_str, text, truncated, retweet_count, favorite_count } = curr;
+			const {
+				created_at,
+				id_str,
+				text,
+				truncated,
+				retweet_count,
+				favorite_count
+			} = curr;
 			let trimmedTweet = {
 				created_at,
 				id_str,
@@ -124,15 +156,15 @@ class SearchUser extends Component {
 		sortedTweets.sort((a, b) => {
 			return new Date(b[0]).getTime() - new Date(a[0]).getTime();
 		});
+
 		return { account, tweetsObj, sortedTweets };
 	}
 
 	handleChange = ev => {
-		this.setState({ username: ev.target.value, message: '' });
+		this.setState({ username: ev.target.value, message: "" });
 	};
 
 	dropdownChanged = e => {
-		console.log(e, 'dropdownChanged');
 		this.setState({ catagory: e.target.value });
 	};
 
@@ -150,7 +182,11 @@ class SearchUser extends Component {
 										padding: 0
 									}}
 								>
-									<select ref="dropdown" value={this.state.catagory} onChange={this.dropdownChanged}>
+									<select
+										ref="dropdown"
+										value={this.state.catagory}
+										onChange={this.dropdownChanged}
+									>
 										<option value="" disabled>
 											Choose your option
 										</option>
@@ -161,8 +197,16 @@ class SearchUser extends Component {
 								</div>
 							}
 							<div>
-								<input type="text" placeholder="username" value={username} onChange={this.handleChange} />
-								<button className="waves-effect waves-light btn" onClick={this.handleClick}>
+								<input
+									type="text"
+									placeholder="username"
+									value={username}
+									onChange={this.handleChange}
+								/>
+								<button
+									className="waves-effect waves-light btn"
+									onClick={this.handleClick}
+								>
 									Search
 								</button>
 							</div>

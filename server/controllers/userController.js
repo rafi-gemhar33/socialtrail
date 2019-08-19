@@ -78,6 +78,8 @@ module.exports = {
 			} else if(user){
 				return res.status(403).json({ success: false, massege: "User alredy exist" });
 			} else if(!user){
+				console.log(req.body,"fifififif");
+				
 				User.create(req.body, (err, user) => {
 					if(err){
 						return res.status(500).json({ success: false, massege: "Server error" });
