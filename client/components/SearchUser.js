@@ -24,7 +24,6 @@ class SearchUser extends Component {
 	}
 
 	handleClick = () => {
-		console.log("click search+++++++++++++++++++++++++");
 
 		event.preventDefault();
 		//Testing data
@@ -77,10 +76,8 @@ class SearchUser extends Component {
 					return response.json();
 				})
 				.then(res => {
-					// console.log("in 2st fetch", res);
 					if (res.success) {
 						let { sortedTweets, account } = this.sortByDays(res.tweets);
-
 						this.setState({ tweets: sortedTweets, isLoading: false });
 					} else {
 						this.setState({
@@ -97,6 +94,7 @@ class SearchUser extends Component {
 	};
 
 	sortByDays(tweets) {
+		
 		const account = this.state.account || {};
 
 		let tweetsObj = tweets.reduce((acc, curr) => {
@@ -158,6 +156,7 @@ class SearchUser extends Component {
 		sortedTweets.sort((a, b) => {
 			return new Date(b[0]).getTime() - new Date(a[0]).getTime();
 		});
+
 		return { account, tweetsObj, sortedTweets };
 	}
 

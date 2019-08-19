@@ -1,5 +1,4 @@
 const TwiterAccount = require("../models/TwitterAccount");
-const Tweet = require("../models/Tweet");
 
 const Twitter = require("twitter");
 
@@ -122,7 +121,7 @@ module.exports = {
             screen_name: account.screen_name || "",
             count: 200,
             // include_rts:false,
-            // trim_user: true
+            trim_user: true
             // max_id:1157349134279557125,
             // exclude_replies:true,
           };
@@ -132,34 +131,16 @@ module.exports = {
             response
           ) {
             if (!error) {
-              // console.log(tweets);
-              
-              Tweet.insertMany(tweets,{ ordered: false})
-              .then(function (docs) {
-                // response.json(docs);
-                // console.log(docs);
-                return res.status(200).json({
-                  success: true,
-                  massege: "Account alredy exist",
-                  tweets: docs
-                });
-                
-            })
-            .catch(function (err) {
-                // response.status(500).send(err);
-                console.log("err", err);
-
                 return res.status(500).json({
-                  success: false,
-                  massege: "some error exist",
-                  tweets: []
+                  success: true,
+                  massege: "live tweets fetch",
+                  tweets: tweets
                 });
-            });
             } else {
               console.log("error", error);
               return res.status(403).json({
                 success: flase,
-                massege: "Account alredy exist",
+                massege: "Server error exist",
                 tweets: []
               });
             }
@@ -167,7 +148,7 @@ module.exports = {
 				} else if (!account) {
           return res.status(403).json({
 						success: false,
-						massege: "User alredy exist",
+						massege: "No user found",
 						tweets: []
 					});
 				}

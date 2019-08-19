@@ -46,12 +46,12 @@ const TwitterAccountSchema = new Schema(
 		profile_image_url: {
 			type: String
 		},
-		tweets: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: "Tweet"
-			}
-		],
+		// tweets: [
+		// 	{
+		// 		type: Schema.Types.ObjectId,
+		// 		ref: "Tweet"
+		// 	}
+		// ],
 		maxid: {
 			type: String
 		}
