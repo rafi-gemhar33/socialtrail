@@ -10,8 +10,8 @@ import M from "materialize-css";
 
 class SearchUser extends Component {
 	state = {
-		username: "dprank",
-		message: "pre filled for testing",
+		username: '',
+		message: '',
 		tweets: null,
 		isLoading: false,
 		account: null,
