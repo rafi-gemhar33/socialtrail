@@ -45,7 +45,6 @@ module.exports = {
 	},
 
 	login: (req,res) => {
-		console.log(req.body,'rendered login');
 		User.findOne({ email: req.body.email }, (err,user) => {
 			if(err){
 				return res.status(500).json({ error: err, success: false, massege: "Server error" });
@@ -70,7 +69,6 @@ module.exports = {
 	},
 
 	signUp: (req,res) => {
-		console.log(req.body,'rendered sign up');
 
 		User.findOne({ email: req.body.email }, (err, user) => {
 			if(err){
@@ -78,7 +76,6 @@ module.exports = {
 			} else if(user){
 				return res.status(403).json({ success: false, massege: "User alredy exist" });
 			} else if(!user){
-				console.log(req.body,"fifififif");
 				
 				User.create(req.body, (err, user) => {
 					if(err){
@@ -116,11 +113,30 @@ module.exports = {
 	},
 
 	followTwiter:(req, res) => {
-		res.json({route: "twitter-follow"})
+		// console.log(req.body.user, "&&&&&&&&&&&", req.body.account);
+		User.findByIdAndUpdate(req.body.user._id,{ $push : {followingAccounts: req.body.account} }, {new: true}, (err, updatedUser)=> {
+			if(err){
+				return res.status(500).json({ error: err, success: false, massege: "Server error" });
+			} else {
+
+				res.status(200).json({ success: true, user: updatedUser })
+			}
+			// console.log(updatedUser);
+		})
+		// res.json({route: "twitter-follow"})
 	},
 
 	unFollowTwiter: (req, res) => {
-		res.json({route: "twitter-unFollow"})
+		console.log(req.body.user, "&&&&&&&&&&&", req.body.account);
+		User.findByIdAndUpdate(req.body.user._id,{ $pull : {followingAccounts: req.body.account._id} }, {new: true}, (err, updatedUser)=> {
+			if(err){
+				return res.status(500).json({ error: err, success: false, massege: "Server error" });
+			} else {
+				res.status(200).json({ success: true, user: updatedUser })
+			}
+			// console.log(updatedUser);
+		})
+		// res.json({route: "twitter-Unfollow"})
 	},
 
 }

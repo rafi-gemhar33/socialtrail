@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import Chart from "./Chart";
-import Table from "./Table";
-import UserCard from "./UserCard";
-import { testTweets, testUser } from "../../tweet";
-import "materialize-css/dist/css/materialize.min.css";
-import M from "materialize-css";
+import Chart from './Chart';
+import Table from './Table';
+import UserCard from './UserCard';
+import { testTweets, testUser } from '../../tweet';
+import 'materialize-css/dist/css/materialize.min.css';
+import M from 'materialize-css';
 
 class SearchUser extends Component {
 	state = {
@@ -15,7 +15,8 @@ class SearchUser extends Component {
 		tweets: null,
 		isLoading: false,
 		account: null,
-		catagory: ""
+		catagory: '',
+		isFollowing: false
 	};
 
 	componentDidMount() {
@@ -23,78 +24,102 @@ class SearchUser extends Component {
 		M.AutoInit();
 	}
 
-	handleClick = () => {
+	handleFollow = () => {
+		const isFollowing =
+			this.props.currentUser.user &&
+			this.props.currentUser.user.followingAccounts.includes(
+				this.state.account && this.state.account._id
+			);
+		this.setState(prevState => {
+			return { isFollowing: !prevState.isFollowing };
+		});
+	};
 
+	handleSearch = () => {
 		event.preventDefault();
 		//Testing data
 		// this.setState({ tweets: testTweets, isLoading: false, account: testUser });
+
 		if (this.state.username.length > 0) {
 			this.setState({ isLoading: true });
 
-			fetch("http://localhost:3000/api/v1/twitter/account", {
-				method: "POST", // *GET, POST, PUT, DELETE, etc.
-				mode: "cors", // no-cors, cors, *same-origin
-				cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-				credentials: "same-origin", // include, *same-origin, omit
-				headers: {
-					"Content-Type": "application/json"
-					// 'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				redirect: "follow", // manual, *follow, error
-				referrer: "no-referrer", // no-referrer, *client
-				body: JSON.stringify({ username: this.state.username })
-			})
-				.then(response => {
-					return response.json();
+			if (this.state.catagory === 'twitter') {
+				fetch('http://localhost:3000/api/v1/twitter/account', {
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, *same-origin, omit
+					headers: {
+						'Content-Type': 'application/json'
+						// 'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // no-referrer, *client
+					body: JSON.stringify({ username: this.state.username })
 				})
-				.then(res => {
-					if (res.success) {
-						const account = res.account;
-						this.setState({ account });
-					} else {
-						this.setState({
-							message: "it seems the username does not exist check again",
-							isLoading: false
-						});
-					}
-				});
+					.then(response => {
+						return response.json();
+					})
+					.then(res => {
+						if (res.success) {
+							const account = res.account;
+							const isFollowing =
+								this.props.currentUser.user &&
+								this.props.currentUser.user.followingAccounts.includes(
+									account._id
+								);
 
-			fetch("http://localhost:3000/api/v1/twitter/tweets", {
-				method: "POST", // *GET, POST, PUT, DELETE, etc.
-				mode: "cors", // no-cors, cors, *same-origin
-				cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-				credentials: "same-origin", // include, *same-origin, omit
-				headers: {
-					"Content-Type": "application/json"
-					// 'Content-Type': 'application/x-www-form-urlencoded',
-				},
-				redirect: "follow", // manual, *follow, error
-				referrer: "no-referrer", // no-referrer, *client
-				body: JSON.stringify({ username: this.state.username })
-			})
-				.then(response => {
-					return response.json();
+							this.setState({ account, isFollowing });
+						} else {
+							this.setState({
+								message:
+									'it seems the username does not exist check again-Account',
+								isLoading: false
+							});
+						}
+					});
+
+				fetch('http://localhost:3000/api/v1/twitter/tweets', {
+					method: 'POST', // *GET, POST, PUT, DELETE, etc.
+					mode: 'cors', // no-cors, cors, *same-origin
+					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+					credentials: 'same-origin', // include, *same-origin, omit
+					headers: {
+						'Content-Type': 'application/json'
+						// 'Content-Type': 'application/x-www-form-urlencoded',
+					},
+					redirect: 'follow', // manual, *follow, error
+					referrer: 'no-referrer', // no-referrer, *client
+					body: JSON.stringify({ username: this.state.username })
 				})
-				.then(res => {
-					if (res.success) {
-						let { sortedTweets, account } = this.sortByDays(res.tweets);
-						this.setState({ tweets: sortedTweets, isLoading: false });
-					} else {
-						this.setState({
-							message: "it seems the username does not exist check again",
-							isLoading: false
-						});
-					}
-				});
+					.then(response => {
+						return response.json();
+					})
+					.then(res => {
+						if (res.success) {
+							let { sortedTweets, account } = this.sortByDays(res.tweets);
+							this.setState({ tweets: sortedTweets, isLoading: false });
+						} else {
+							this.setState({
+								message:
+									'it seems the username does not exist check again -TWEETS',
+								isLoading: false
+							});
+						}
+					});
+			} else if (this.state.catagory === 'instagram') {
+				//Do Insta stuff
+			} else if (this.state.catagory === 'youtube') {
+				//Do Youtube stuff
+			}
 		} else {
 			this.setState({
-				message: "why the hell are you searching for a empty username"
+				message: 'why the hell are you searching for a empty username'
 			});
 		}
 	};
 
 	sortByDays(tweets) {
-		
 		const account = this.state.account || {};
 
 		let tweetsObj = tweets.reduce((acc, curr) => {
@@ -161,7 +186,7 @@ class SearchUser extends Component {
 	}
 
 	handleChange = ev => {
-		this.setState({ username: ev.target.value, message: "" });
+		this.setState({ username: ev.target.value, message: '' });
 	};
 
 	dropdownChanged = e => {
@@ -169,7 +194,14 @@ class SearchUser extends Component {
 	};
 
 	render() {
-		const { username, message, isLoading, account, tweets } = this.state;
+		const {
+			username,
+			message,
+			isLoading,
+			account,
+			tweets,
+			isFollowing
+		} = this.state;
 		return (
 			<div className="row">
 				<div className="col s8 offset-s2">
@@ -205,7 +237,7 @@ class SearchUser extends Component {
 								/>
 								<button
 									className="waves-effect waves-light btn"
-									onClick={this.handleClick}
+									onClick={this.handleSearch}
 								>
 									Search
 								</button>
@@ -214,7 +246,13 @@ class SearchUser extends Component {
 						</form>
 					</div>
 					{isLoading ? <p>Loading...</p> : <></>}
-					{account ? <UserCard account={account} /> : null}
+					{account ? (
+						<UserCard
+							account={account}
+							isFollowing={isFollowing}
+							handleFollow={this.handleFollow}
+						/>
+					) : null}
 					{tweets ? (
 						<>
 							<Chart chartData={tweets} account={account} />
@@ -227,4 +265,10 @@ class SearchUser extends Component {
 	}
 }
 
-export default SearchUser;
+const mapStateToProps = state => {
+	return {
+		currentUser: state.currentUser.user
+	};
+};
+
+export default connect(mapStateToProps)(SearchUser);

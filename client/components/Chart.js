@@ -112,7 +112,7 @@ class Chart extends Component {
 						options={{
 							title: {
 								display: this.props.displayTitle,
-								text: "Average ENgagement per day",
+								text: "Average Engagement per day",
 								fontSize: 16
 							},
 							legend: {
