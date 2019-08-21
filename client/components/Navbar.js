@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import CurrentUser from '../components/CurrentUser';
+
+
 class Navbar extends Component {
 	handleLogout = () => {
 		localStorage.clear();
@@ -44,10 +47,23 @@ class Navbar extends Component {
 										</NavLink>
 									</li>
 									<li>
+										<NavLink to="/dashboard" exact activeClassName="active" isActive={this.checkActive}>
+											Dashboard
+										</NavLink>
+									</li>
+									<li>
 										<a href="/" onClick={this.handleLogout}>
 											Logout
 										</a>
 									</li>
+									<li>
+										<a href="/">
+										<CurrentUser />
+										</a>
+									</li>
+
+ 
+
 								</div>
 							)}
 						</ul>

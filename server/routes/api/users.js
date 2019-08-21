@@ -13,4 +13,5 @@ router.post('/twitter/follow', auth.verifyToken, userController.followTwiter);
 router.delete('/twitter/follow', auth.verifyToken, userController.unFollowTwiter);
 router.get('/:id', userController.getUser);
 
+
 module.exports = router;
