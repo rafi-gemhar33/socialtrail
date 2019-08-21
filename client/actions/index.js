@@ -6,7 +6,7 @@ const url = 'http://localhost:3000/api/v1';
 //   axios.defaults.headers.Authorization = newToken;
 // }
 
-export const getCurrentUser = (token, hicronstory) => {
+export const getCurrentUser = (token, history) => {
   // console.log(history, "action history");
   return (dispatch => {
     fetch(`${url}/users/me`,{

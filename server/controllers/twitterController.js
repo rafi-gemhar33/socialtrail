@@ -68,22 +68,19 @@ module.exports = {
 								"400x400"
               );
               
-              // console.log(account, "before creation");
               
 
 							TwiterAccount.create(account, (err, newAccount) => {
 								if (err) {
-                  console.log("DamnitKaren its error ***********************",err, newAccount);
 									return res
 										.status(500)
 										.json({ success: false, massege: "Server error" });
 								} else if (newAccount) {
-                  // console.log(newAccount,"check5");
-                  console.log("DamnitKaren its success #########################")
+
 									return res.status(200).json({
 										success: true,
 										massege: "Account registred sucessfully",
-										account: account
+										account: newAccount
 									});
 								}
 							});
@@ -92,7 +89,7 @@ module.exports = {
 							// 	account: account
 							// });
 						} else {
-							console.log("error", tweets);
+							console.log("error", error);
 							res.json({
 								success: false
 							});
@@ -104,21 +101,8 @@ module.exports = {
 	},
 
 	getAllTweets: (req, res) => {
-		TwiterAccount.findOne(
-			{ screen_name: req.body.username },
-			(err, account) => {
-				if (err) {
-					return res
-						.status(500)
-						.json({
-							error:  err,
-							success: false,
-							massege: "Server error",
-							account: {}
-						});
-				} else if (account) {
           const params = {
-            screen_name: account.screen_name || "",
+            screen_name: req.body.username || "",
             count: 200,
             // include_rts:false,
             trim_user: true
@@ -131,7 +115,7 @@ module.exports = {
             response
           ) {
             if (!error) {
-                return res.status(500).json({
+                return res.status(200).json({
                   success: true,
                   massege: "live tweets fetch",
                   tweets: tweets
@@ -139,21 +123,12 @@ module.exports = {
             } else {
               console.log("error", error);
               return res.status(403).json({
-                success: flase,
-                massege: "Server error exist",
+                success: false,
+                massege: "No user found",
                 tweets: []
               });
             }
           });
-				} else if (!account) {
-          return res.status(403).json({
-						success: false,
-						massege: "No user found",
-						tweets: []
-					});
-				}
-			}
-		);
 	},
 
 	followTwiter: (req, res) => {
