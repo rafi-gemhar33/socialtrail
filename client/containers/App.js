@@ -9,7 +9,7 @@ import Login from '../components/Login';
 import SignUp from '../components/SignUp';
 import HomePage from '../components/HomePage';
 import Navbar from '../components/Navbar';
-import CurrentUser from '../components/CurrentUser';
+import Dashboard from '../components/Dashboard';
 
 class App extends Component {
   state = {
@@ -30,12 +30,12 @@ class App extends Component {
     return (
       <div>
         <Navbar />
-        <CurrentUser />
         <div className="">
           <Switch>
             <Route exact path="/" component={HomePage} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={SignUp} />
+            <Route path="/dashboard" component={Dashboard} />
             <Route render={() => <h1>404 Page not found</h1>} />
           </Switch>
         </div>

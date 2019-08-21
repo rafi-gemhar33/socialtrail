@@ -26,13 +26,12 @@ class SearchUser extends Component {
 
 	handleFollow = () => {
 		const isFollowing =
+			this.props.currentUser &&
 			this.props.currentUser.user &&
 			this.props.currentUser.user.followingAccounts.includes(
 				this.state.account && this.state.account._id
 			);
-		this.setState(prevState => {
-			return { isFollowing: !prevState.isFollowing };
-		});
+		this.setState({ isFollowing });
 	};
 
 	handleSearch = () => {
@@ -44,73 +43,25 @@ class SearchUser extends Component {
 			this.setState({ isLoading: true });
 
 			if (this.state.catagory === 'twitter') {
-				fetch('http://localhost:3000/api/v1/twitter/account', {
-					method: 'POST', // *GET, POST, PUT, DELETE, etc.
-					mode: 'cors', // no-cors, cors, *same-origin
-					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-					credentials: 'same-origin', // include, *same-origin, omit
-					headers: {
-						'Content-Type': 'application/json'
-						// 'Content-Type': 'application/x-www-form-urlencoded',
-					},
-					redirect: 'follow', // manual, *follow, error
-					referrer: 'no-referrer', // no-referrer, *client
-					body: JSON.stringify({ username: this.state.username })
-				})
-					.then(response => {
-						return response.json();
-					})
-					.then(res => {
-						if (res.success) {
-							const account = res.account;
-							const isFollowing =
-								this.props.currentUser.user &&
-								this.props.currentUser.user.followingAccounts.includes(
-									account._id
-								);
-
-							this.setState({ account, isFollowing });
-						} else {
-							this.setState({
-								message:
-									'it seems the username does not exist check again-Account',
-								isLoading: false
-							});
-						}
-					});
-
-				fetch('http://localhost:3000/api/v1/twitter/tweets', {
-					method: 'POST', // *GET, POST, PUT, DELETE, etc.
-					mode: 'cors', // no-cors, cors, *same-origin
-					cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-					credentials: 'same-origin', // include, *same-origin, omit
-					headers: {
-						'Content-Type': 'application/json'
-						// 'Content-Type': 'application/x-www-form-urlencoded',
-					},
-					redirect: 'follow', // manual, *follow, error
-					referrer: 'no-referrer', // no-referrer, *client
-					body: JSON.stringify({ username: this.state.username })
-				})
-					.then(response => {
-						return response.json();
-					})
-					.then(res => {
-						if (res.success) {
-							let { sortedTweets, account } = this.sortByDays(res.tweets);
-							this.setState({ tweets: sortedTweets, isLoading: false });
-						} else {
-							this.setState({
-								message:
-									'it seems the username does not exist check again -TWEETS',
-								isLoading: false
-							});
-						}
-					});
+				this.fetchTwitterAccount();
+				this.fetchAllTweets();
 			} else if (this.state.catagory === 'instagram') {
 				//Do Insta stuff
+				this.setState({
+					message: 'Instagram trails is coming soon...',
+					isLoading: false
+				});
 			} else if (this.state.catagory === 'youtube') {
 				//Do Youtube stuff
+				this.setState({
+					message: 'Youtube trails is coming soon...',
+					isLoading: false
+				});
+			} else {
+				this.setState({
+					message: 'Please select a valid social media',
+					isLoading: false
+				});
 			}
 		} else {
 			this.setState({
@@ -119,6 +70,74 @@ class SearchUser extends Component {
 		}
 	};
 
+	fetchTwitterAccount() {
+		fetch('http://localhost:3000/api/v1/twitter/account', {
+			method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			mode: 'cors', // no-cors, cors, *same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+			headers: {
+				'Content-Type': 'application/json'
+				// 'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			redirect: 'follow', // manual, *follow, error
+			referrer: 'no-referrer', // no-referrer, *client
+			body: JSON.stringify({ username: this.state.username })
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(res => {
+				if (res.success) {
+					const account = res.account;
+					// console.log(this.props.currentUser.user);
+
+					const isFollowing = !!(
+						this.props.currentUser &&
+						this.props.currentUser.user &&
+						this.props.currentUser.user.followingAccounts.includes(account._id)
+					);
+
+					this.setState({ account, isFollowing });
+				} else {
+					this.setState({
+						message: 'it seems the username does not exist check again-Account',
+						isLoading: false,
+						message: ''
+					});
+				}
+			});
+	}
+
+	fetchAllTweets() {
+		fetch('http://localhost:3000/api/v1/twitter/tweets', {
+			method: 'POST', // *GET, POST, PUT, DELETE, etc.
+			mode: 'cors', // no-cors, cors, *same-origin
+			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+			credentials: 'same-origin', // include, *same-origin, omit
+			headers: {
+				'Content-Type': 'application/json'
+				// 'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			redirect: 'follow', // manual, *follow, error
+			referrer: 'no-referrer', // no-referrer, *client
+			body: JSON.stringify({ username: this.state.username })
+		})
+			.then(response => {
+				return response.json();
+			})
+			.then(res => {
+				if (res.success) {
+					let { sortedTweets, account } = this.sortByDays(res.tweets);
+					this.setState({ tweets: sortedTweets, isLoading: false });
+				} else {
+					this.setState({
+						message: 'it seems the username does not exist check again -TWEETS',
+						isLoading: false
+					});
+				}
+			});
+	}
 	sortByDays(tweets) {
 		const account = this.state.account || {};
 

@@ -6,17 +6,18 @@ const initialState = {
 };
 
 function updateUser(state = initialState, action) {
-  switch (action.type) {
-    case 'UPDATE_USER_SUCCESS':
-      console.log(action.data);
-      
-      return {
-        ...state,
-        user: action.data
-      };
-    default:
-      return state;
-  }
+  // console.log("in reducer...123",action );
+  
+  // switch (action.type) {
+  //   case 'UPDATE_USER_SUCCESS':
+  //     console.log("in reducer...456",action );
+  //     return {
+  //       ...state,
+  //       user: action.data
+  //     };
+  //   default:
+  //     return state;
+  // }
 }
 
 export default updateUser;

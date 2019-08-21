@@ -1,3 +1,23 @@
 .active {
 	border-bottom: 4px solid #26a69a;
 }
+
+.avatar-box {
+	height: 64px;
+	display: flex;
+}
+.avatar {
+	margin: 0;
+	height: 3.5rem;
+	align-self: center;
+	width: 3.5rem;
+	text-align: center;
+	display: block;
+	border: 2px solid;
+	font-weight: 500;
+	font-size: 2rem;
+	text-transform: uppercase;
+	border-radius: 50%;
+	background: #26a69a;
+	line-height: 1.7;
+}

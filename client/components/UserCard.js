@@ -10,6 +10,7 @@ class UserCard extends Component {
 		const method = ev.target.name === 'follow' ? 'POST' : 'DELETE';
 		const url = 'http://localhost:3000/api/v1//users/twitter/follow';
 		const token = localStorage.getItem('jwt') || '';
+		
 		if (this.props.currentUser) {
 			fetch(`${url}`, {
 				method: method,
@@ -19,13 +20,14 @@ class UserCard extends Component {
 					Authorization: token
 				},
 				body: JSON.stringify({
-					user: this.props.currentUser.user,
+		 			user: this.props.currentUser.user,
 					account: this.props.account
 				})
 			})
 				.then(res => res.json())
 				.then(data => {
-					this.props.dispatch({ type: 'UPDATE_USER_SUCCESS', data: data.user });
+					
+					this.props.dispatch({ type: 'UPDATE_USER_SUCCESS', data: data });
 					this.props.handleFollow();
 				});
 		} else {
@@ -87,6 +89,7 @@ class UserCard extends Component {
 }
 
 const mapStateToProps = state => {
+	
 	return {
 		currentUser: state.currentUser.user
 	};
