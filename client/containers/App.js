@@ -5,10 +5,10 @@ import '../scss/index.scss';
 
 import { getCurrentUser, noToken } from '../actions';
 
-import Login from '../components/Login';
-import SignUp from '../components/SignUp';
+import Login from '../components/user/Login';
+import SignUp from '../components/user/SignUp';
 import HomePage from '../components/HomePage';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/layout/Navbar';
 import Dashboard from '../components/Dashboard';
 
 class App extends Component {

@@ -21,3 +21,8 @@
 	background: #26a69a;
 	line-height: 1.7;
 }
+
+.chart-box {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}

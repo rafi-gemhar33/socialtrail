@@ -4,19 +4,18 @@ import { connect } from 'react-redux';
 import Chart from './Chart';
 import Table from './Table';
 import UserCard from './UserCard';
-import { testTweets, testUser } from '../../tweet';
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
 
 class SearchUser extends Component {
 	state = {
-		username: '',
+		username: 'graf_dev',
 		message: '',
 		tweets: null,
 		isLoading: false,
 		account: null,
 		catagory: '',
-		isFollowing: false
+		isFollowing: false,
 	};
 
 	componentDidMount() {
@@ -36,8 +35,6 @@ class SearchUser extends Component {
 
 	handleSearch = () => {
 		event.preventDefault();
-		//Testing data
-		// this.setState({ tweets: testTweets, isLoading: false, account: testUser });
 
 		if (this.state.username.length > 0) {
 			this.setState({ isLoading: true });
@@ -49,23 +46,23 @@ class SearchUser extends Component {
 				//Do Insta stuff
 				this.setState({
 					message: 'Instagram trails is coming soon...',
-					isLoading: false
+					isLoading: false,
 				});
 			} else if (this.state.catagory === 'youtube') {
 				//Do Youtube stuff
 				this.setState({
 					message: 'Youtube trails is coming soon...',
-					isLoading: false
+					isLoading: false,
 				});
 			} else {
 				this.setState({
 					message: 'Please select a valid social media',
-					isLoading: false
+					isLoading: false,
 				});
 			}
 		} else {
 			this.setState({
-				message: 'why the hell are you searching for a empty username'
+				message: 'Plese enter a username',
 			});
 		}
 	};
@@ -77,12 +74,12 @@ class SearchUser extends Component {
 			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 			credentials: 'same-origin', // include, *same-origin, omit
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 				// 'Content-Type': 'application/x-www-form-urlencoded',
 			},
 			redirect: 'follow', // manual, *follow, error
 			referrer: 'no-referrer', // no-referrer, *client
-			body: JSON.stringify({ username: this.state.username })
+			body: JSON.stringify({ username: this.state.username }),
 		})
 			.then(response => {
 				return response.json();
@@ -90,7 +87,6 @@ class SearchUser extends Component {
 			.then(res => {
 				if (res.success) {
 					const account = res.account;
-					// console.log(this.props.currentUser.user);
 
 					const isFollowing = !!(
 						this.props.currentUser &&
@@ -103,7 +99,7 @@ class SearchUser extends Component {
 					this.setState({
 						message: 'it seems the username does not exist check again-Account',
 						isLoading: false,
-						message: ''
+						message: '',
 					});
 				}
 			});
@@ -116,24 +112,24 @@ class SearchUser extends Component {
 			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
 			credentials: 'same-origin', // include, *same-origin, omit
 			headers: {
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
 				// 'Content-Type': 'application/x-www-form-urlencoded',
 			},
 			redirect: 'follow', // manual, *follow, error
 			referrer: 'no-referrer', // no-referrer, *client
-			body: JSON.stringify({ username: this.state.username })
+			body: JSON.stringify({ username: this.state.username }),
 		})
 			.then(response => {
 				return response.json();
 			})
 			.then(res => {
 				if (res.success) {
-					let { sortedTweets, account } = this.sortByDays(res.tweets);
+					let { sortedTweets } = this.sortByDays(res.tweets);
 					this.setState({ tweets: sortedTweets, isLoading: false });
 				} else {
 					this.setState({
 						message: 'it seems the username does not exist check again -TWEETS',
-						isLoading: false
+						isLoading: false,
 					});
 				}
 			});
@@ -149,7 +145,7 @@ class SearchUser extends Component {
 				text,
 				truncated,
 				retweet_count,
-				favorite_count
+				favorite_count,
 			} = curr;
 			let trimmedTweet = {
 				created_at,
@@ -157,38 +153,27 @@ class SearchUser extends Component {
 				text,
 				truncated,
 				retweet_count,
-				favorite_count
+				favorite_count,
 			};
 			if (acc.hasOwnProperty(day)) {
 				acc[day].tweets.push(trimmedTweet);
 				acc[day].totalLikes += trimmedTweet.favorite_count;
 				acc[day].totalRT += trimmedTweet.retweet_count;
-				acc[day].avgRT = +(acc[day].totalRT / acc[day].tweets.length).toFixed(
-					2
-				);
-				acc[day].avgLikes = +(
-					acc[day].totalLikes / acc[day].tweets.length
-				).toFixed(2);
-				acc[day].avgEngagement = +(
-					((acc[day].totalRT + acc[day].totalLikes) / account.followers_count) *
-					100
-				).toFixed(2);
 			} else {
 				acc[day] = {};
 				acc[day].tweets = [trimmedTweet];
 				acc[day].totalLikes = trimmedTweet.favorite_count;
 				acc[day].totalRT = trimmedTweet.retweet_count;
-				acc[day].avgRT = +(acc[day].totalRT / acc[day].tweets.length).toFixed(
-					2
-				);
-				acc[day].avgLikes = +(
-					acc[day].totalLikes / acc[day].tweets.length
-				).toFixed(2);
-				acc[day].avgEngagement = +(
-					((acc[day].totalRT + acc[day].totalLikes) / account.followers_count) *
-					100
-				).toFixed(2);
 			}
+			acc[day].avgLikes = +(
+				acc[day].totalLikes / acc[day].tweets.length
+			).toFixed(2);
+			acc[day].avgRT = +(acc[day].totalRT / acc[day].tweets.length).toFixed(2);
+			acc[day].avgEngagement = +(
+				((acc[day].totalRT + acc[day].totalLikes) / account.followers_count) *
+				100
+			).toFixed(2);
+
 			return acc;
 		}, {});
 
@@ -201,7 +186,7 @@ class SearchUser extends Component {
 			return new Date(b[0]).getTime() - new Date(a[0]).getTime();
 		});
 
-		return { account, tweetsObj, sortedTweets };
+		return { sortedTweets };
 	}
 
 	handleChange = ev => {
@@ -219,7 +204,7 @@ class SearchUser extends Component {
 			isLoading,
 			account,
 			tweets,
-			isFollowing
+			isFollowing,
 		} = this.state;
 		return (
 			<div className="row">
@@ -230,7 +215,7 @@ class SearchUser extends Component {
 								<div
 									className="input-field col s12"
 									style={{
-										padding: 0
+										padding: 0,
 									}}
 								>
 									<select
@@ -272,9 +257,9 @@ class SearchUser extends Component {
 							handleFollow={this.handleFollow}
 						/>
 					) : null}
-					{tweets ? (
+					{tweets && account ? (
 						<>
-							<Chart chartData={tweets} account={account} />
+							<Chart tweets={tweets} account={account} />
 							<Table tableData={tweets} account={account} />
 						</>
 					) : null}
@@ -286,7 +271,7 @@ class SearchUser extends Component {
 
 const mapStateToProps = state => {
 	return {
-		currentUser: state.currentUser.user
+		currentUser: state.currentUser.user,
 	};
 };
 

@@ -54,6 +54,8 @@ mongoose.connect('mongodb://localhost:27017/social-Tracker', function (err) {
 
 // webpack
 if (process.env.NODE_ENV === 'development') {
+  console.log();
+  
   const webpack = require('webpack');
   const webpackConfig = require('./webpack.config.prod');
   const compiler = webpack(webpackConfig);
