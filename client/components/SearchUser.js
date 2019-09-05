@@ -4,19 +4,21 @@ import { connect } from 'react-redux';
 import Chart from './Chart';
 import Table from './Table';
 import UserCard from './UserCard';
-import { testTweets, testUser } from '../../tweet';
-import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
+
+import {
+	setLoading,
+	addAccount,
+	setFollow,
+	addTweets,
+	addMessage,
+} from '../actions/twitterActions';
 
 class SearchUser extends Component {
 	state = {
-		username: '',
-		message: '',
-		tweets: null,
-		isLoading: false,
-		account: null,
-		catagory: '',
-		isFollowing: false
+		// remove default values
+		username: 'grafi_dev',
+		catagory: 'twitter',
 	};
 
 	componentDidMount() {
@@ -24,185 +26,30 @@ class SearchUser extends Component {
 		M.AutoInit();
 	}
 
-	handleFollow = () => {
-		const isFollowing =
-			this.props.currentUser &&
-			this.props.currentUser.user &&
-			this.props.currentUser.user.followingAccounts.includes(
-				this.state.account && this.state.account._id
-			);
-		this.setState({ isFollowing });
+	handleFollow = (targetName, account) => {
+		this.props.setFollow(this.props.user, account, targetName);
 	};
 
-	handleSearch = () => {
+	handleSearch = event => {
 		event.preventDefault();
-		//Testing data
-		// this.setState({ tweets: testTweets, isLoading: false, account: testUser });
 
 		if (this.state.username.length > 0) {
-			this.setState({ isLoading: true });
-
 			if (this.state.catagory === 'twitter') {
-				this.fetchTwitterAccount();
-				this.fetchAllTweets();
+				this.props.addAccount(this.props.user, this.state.username);
+				this.props.addTweets(this.state.username);
 			} else if (this.state.catagory === 'instagram') {
 				//Do Insta stuff
-				this.setState({
-					message: 'Instagram trails is coming soon...',
-					isLoading: false
-				});
+				this.props.addMessage('Youtube trails is coming soon...');
 			} else if (this.state.catagory === 'youtube') {
 				//Do Youtube stuff
-				this.setState({
-					message: 'Youtube trails is coming soon...',
-					isLoading: false
-				});
+				this.props.addMessage('Youtube trails is coming soon...');
 			} else {
-				this.setState({
-					message: 'Please select a valid social media',
-					isLoading: false
-				});
+				this.props.addMessage('Please select a valid social media');
 			}
 		} else {
-			this.setState({
-				message: 'why the hell are you searching for a empty username'
-			});
+			this.props.addMessage('Please select a valid social media');
 		}
 	};
-
-	fetchTwitterAccount() {
-		fetch('http://localhost:3000/api/v1/twitter/account', {
-			method: 'POST', // *GET, POST, PUT, DELETE, etc.
-			mode: 'cors', // no-cors, cors, *same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-			headers: {
-				'Content-Type': 'application/json'
-				// 'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			redirect: 'follow', // manual, *follow, error
-			referrer: 'no-referrer', // no-referrer, *client
-			body: JSON.stringify({ username: this.state.username })
-		})
-			.then(response => {
-				return response.json();
-			})
-			.then(res => {
-				if (res.success) {
-					const account = res.account;
-					// console.log(this.props.currentUser.user);
-
-					const isFollowing = !!(
-						this.props.currentUser &&
-						this.props.currentUser.user &&
-						this.props.currentUser.user.followingAccounts.includes(account._id)
-					);
-
-					this.setState({ account, isFollowing });
-				} else {
-					this.setState({
-						message: 'it seems the username does not exist check again-Account',
-						isLoading: false,
-						message: ''
-					});
-				}
-			});
-	}
-
-	fetchAllTweets() {
-		fetch('http://localhost:3000/api/v1/twitter/tweets', {
-			method: 'POST', // *GET, POST, PUT, DELETE, etc.
-			mode: 'cors', // no-cors, cors, *same-origin
-			cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-			credentials: 'same-origin', // include, *same-origin, omit
-			headers: {
-				'Content-Type': 'application/json'
-				// 'Content-Type': 'application/x-www-form-urlencoded',
-			},
-			redirect: 'follow', // manual, *follow, error
-			referrer: 'no-referrer', // no-referrer, *client
-			body: JSON.stringify({ username: this.state.username })
-		})
-			.then(response => {
-				return response.json();
-			})
-			.then(res => {
-				if (res.success) {
-					let { sortedTweets, account } = this.sortByDays(res.tweets);
-					this.setState({ tweets: sortedTweets, isLoading: false });
-				} else {
-					this.setState({
-						message: 'it seems the username does not exist check again -TWEETS',
-						isLoading: false
-					});
-				}
-			});
-	}
-	sortByDays(tweets) {
-		const account = this.state.account || {};
-
-		let tweetsObj = tweets.reduce((acc, curr) => {
-			let day = curr.created_at.slice(4, 11) + curr.created_at.slice(-4);
-			const {
-				created_at,
-				id_str,
-				text,
-				truncated,
-				retweet_count,
-				favorite_count
-			} = curr;
-			let trimmedTweet = {
-				created_at,
-				id_str,
-				text,
-				truncated,
-				retweet_count,
-				favorite_count
-			};
-			if (acc.hasOwnProperty(day)) {
-				acc[day].tweets.push(trimmedTweet);
-				acc[day].totalLikes += trimmedTweet.favorite_count;
-				acc[day].totalRT += trimmedTweet.retweet_count;
-				acc[day].avgRT = +(acc[day].totalRT / acc[day].tweets.length).toFixed(
-					2
-				);
-				acc[day].avgLikes = +(
-					acc[day].totalLikes / acc[day].tweets.length
-				).toFixed(2);
-				acc[day].avgEngagement = +(
-					((acc[day].totalRT + acc[day].totalLikes) / account.followers_count) *
-					100
-				).toFixed(2);
-			} else {
-				acc[day] = {};
-				acc[day].tweets = [trimmedTweet];
-				acc[day].totalLikes = trimmedTweet.favorite_count;
-				acc[day].totalRT = trimmedTweet.retweet_count;
-				acc[day].avgRT = +(acc[day].totalRT / acc[day].tweets.length).toFixed(
-					2
-				);
-				acc[day].avgLikes = +(
-					acc[day].totalLikes / acc[day].tweets.length
-				).toFixed(2);
-				acc[day].avgEngagement = +(
-					((acc[day].totalRT + acc[day].totalLikes) / account.followers_count) *
-					100
-				).toFixed(2);
-			}
-			return acc;
-		}, {});
-
-		let sortedTweets = [];
-		for (let key in tweetsObj) {
-			sortedTweets.push([key, tweetsObj[key]]);
-		}
-
-		sortedTweets.sort((a, b) => {
-			return new Date(b[0]).getTime() - new Date(a[0]).getTime();
-		});
-
-		return { account, tweetsObj, sortedTweets };
-	}
 
 	handleChange = ev => {
 		this.setState({ username: ev.target.value, message: '' });
@@ -213,14 +60,9 @@ class SearchUser extends Component {
 	};
 
 	render() {
-		const {
-			username,
-			message,
-			isLoading,
-			account,
-			tweets,
-			isFollowing
-		} = this.state;
+		const { username, catagory } = this.state;
+		const { account, isFollowing, tweets, message, isLoading } = this.props;
+
 		return (
 			<div className="row">
 				<div className="col s8 offset-s2">
@@ -230,12 +72,12 @@ class SearchUser extends Component {
 								<div
 									className="input-field col s12"
 									style={{
-										padding: 0
+										padding: 0,
 									}}
 								>
 									<select
 										ref="dropdown"
-										value={this.state.catagory}
+										value={catagory}
 										onChange={this.dropdownChanged}
 									>
 										<option value="" disabled>
@@ -264,20 +106,20 @@ class SearchUser extends Component {
 							<p className="error">{message}</p>
 						</form>
 					</div>
-					{isLoading ? <p>Loading...</p> : <></>}
-					{account ? (
+					{account && (
 						<UserCard
 							account={account}
-							isFollowing={isFollowing}
 							handleFollow={this.handleFollow}
+							isFollowing={isFollowing}
 						/>
-					) : null}
-					{tweets ? (
+					)}
+					{tweets && account && (
 						<>
-							<Chart chartData={tweets} account={account} />
+							<Chart tweets={tweets} account={account} />
 							<Table tableData={tweets} account={account} />
 						</>
-					) : null}
+					)}
+					{isLoading ? <p>Loading...</p> : <></>}
 				</div>
 			</div>
 		);
@@ -286,8 +128,24 @@ class SearchUser extends Component {
 
 const mapStateToProps = state => {
 	return {
-		currentUser: state.currentUser.user
+		user: state.currentUser.user && state.currentUser.user.user,
+		account: state.twitter.account,
+		isFollowing: state.twitter.isFollowing,
+		tweets: state.twitter.tweets,
+		message: state.twitter.message,
+		isLoading: state.twitter.setLoading,
 	};
 };
 
-export default connect(mapStateToProps)(SearchUser);
+// const mapActionsToProps = state => {
+// 	return {
+// 		user: state.currentUser.user && state.currentUser.user.user,
+// 		account: state.twitter.account,
+// 		isFollowing: state.isFollowing,
+// 	};
+// };
+
+export default connect(
+	mapStateToProps,
+	{ addAccount, setLoading, setFollow, addTweets, addMessage }
+)(SearchUser);

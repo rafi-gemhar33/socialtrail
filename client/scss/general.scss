@@ -21,3 +21,20 @@
 	background: #26a69a;
 	line-height: 1.7;
 }
+
+.chart-box {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.custom-card {
+	display: flex;
+	flex-direction: column-reverse;
+	justify-content: center;
+}
+
+.full-btn {
+	width: 100%;
+	position: relative;
+	top: 50px;
+}
