@@ -37,7 +37,12 @@ class Chart extends Component {
 	};
 
 	setUserData = key => {
-		let labels = this.props.tweets.map(a => a[0].slice(0, 6));
+		let date = new Date(this.props.account.createdAt);
+		let labels = this.props.account.friends_count.map((_, i) => {
+			date.setDate(date.getDate() + i);
+			return date.toDateString().slice(4, 10);
+		})
+		// this.props.tweets.map(a => a[0].slice(0, 6));
 
 		let data = labels.map(() => this.props.account[key]);
 		let chartData = {

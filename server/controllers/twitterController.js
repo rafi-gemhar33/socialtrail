@@ -104,8 +104,8 @@ module.exports = {
           const params = {
             screen_name: req.body.username || "",
             count: 200,
-            // include_rts:false,
-            trim_user: true
+            include_rts:false,
+            // trim_user: true
             // max_id:1157349134279557125,
             // exclude_replies:true,
           };

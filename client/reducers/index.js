@@ -1,10 +1,11 @@
 import { combineReducers } from "redux";
 import currentUser from "./currentUser";
-// import updateUser from "./updateUser";
+import twiterReducer from "./twitterReducer";
 
 
 const rootReducer = combineReducers({
-  currentUser
+  currentUser,
+  twitter: twiterReducer
 });
 
 export default rootReducer;

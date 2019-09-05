@@ -21,7 +21,6 @@ function currentUser(state = initialState, action) {
 				user: null
 			};
 		case 'UPDATE_USER_SUCCESS':
-			// console.log('in reducer...456', action);
 			return {
 				...state,
 				user: action.data

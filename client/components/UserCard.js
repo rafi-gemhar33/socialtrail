@@ -1,38 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+
 class UserCard extends Component {
-	constructor(props) {
-		super(props);
-	}
-
+	
 	handleFollow = ev => {
-		const method = ev.target.name === 'follow' ? 'POST' : 'DELETE';
-		const url = 'http://localhost:3000/api/v1//users/twitter/follow';
-		const token = localStorage.getItem('jwt') || '';
-
 		if (this.props.currentUser) {
-			fetch(`${url}`, {
-				method: method,
-				headers: {
-					'Content-Type': 'application/json',
-					Accept: 'application/json',
-					Authorization: token,
-				},
-				body: JSON.stringify({
-					user: this.props.currentUser.user,
-					account: this.props.account,
-				}),
-			})
-				.then(res => res.json())
-				.then(data => {
-					this.props.dispatch({ type: 'UPDATE_USER_SUCCESS', data: data });
-					this.props.handleFollow();
-				});
+			this.props.handleFollow(ev.target.name, this.props.account);
 		} else {
 			this.props.history.push('/login');
 		}
 	};
+
 	render() {
 		return (
 			<div className="row">
@@ -89,7 +68,7 @@ class UserCard extends Component {
 
 const mapStateToProps = state => {
 	return {
-		currentUser: state.currentUser.user,
+		currentUser: state.currentUser.user && state.currentUser.user.user,
 	};
 };
 
