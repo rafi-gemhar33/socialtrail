@@ -14,10 +14,12 @@ import {
 	addMessage,
 } from '../actions/twitterActions';
 
+import { addYoutubeAccount } from '../actions/youtubeActions';
+
 class SearchUser extends Component {
 	state = {
-		// remove default values
-		username: 'grafi_dev',
+		//TODO remove default values
+		username: 'geekyranjit',
 		catagory: 'twitter',
 	};
 
@@ -42,7 +44,10 @@ class SearchUser extends Component {
 				this.props.addMessage('Youtube trails is coming soon...');
 			} else if (this.state.catagory === 'youtube') {
 				//Do Youtube stuff
-				this.props.addMessage('Youtube trails is coming soon...');
+				console.log('in component selected YT');
+
+				this.props.addYoutubeAccount(this.state.username);
+				// this.props.addMessage('Youtube trails is coming soon...');
 			} else {
 				this.props.addMessage('Please select a valid social media');
 			}
@@ -147,5 +152,12 @@ const mapStateToProps = state => {
 
 export default connect(
 	mapStateToProps,
-	{ addAccount, setLoading, setFollow, addTweets, addMessage }
+	{
+		addAccount,
+		setLoading,
+		setFollow,
+		addTweets,
+		addMessage,
+		addYoutubeAccount,
+	}
 )(SearchUser);

@@ -44,12 +44,11 @@ class Chart extends Component {
 		})
 		// this.props.tweets.map(a => a[0].slice(0, 6));
 
-		let data = labels.map(() => this.props.account[key]);
+		let data = this.props.account[key];
 		let chartData = {
 			labels,
 			datasets: [
 				{
-					// label: "Avg. Likes per day",
 					data,
 					label: 'key',
 					backgroundColor: 'rgba(255, 99, 132, .25)',

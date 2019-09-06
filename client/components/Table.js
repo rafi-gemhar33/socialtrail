@@ -27,10 +27,10 @@ class Table extends Component {
 								return (
 									<tr key={i}>
 										<td>{date.toDateString().slice(4, 10)}</td>
-										<td>{this.props.account.friends_count}</td>
-										<td>{this.props.account.followers_count}</td>
-										<td>{this.props.account.statuses_count}</td>
-										<td>{this.props.account.favourites_count}</td>
+										<td>{this.props.account.friends_count[i]}</td>
+										<td>{this.props.account.followers_count[i]}</td>
+										<td>{this.props.account.statuses_count[i]}</td>
+										<td>{this.props.account.favourites_count[i]}</td>
 									</tr>
 								);
 							})}
