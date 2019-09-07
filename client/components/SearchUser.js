@@ -1,26 +1,33 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import Chart from './Chart';
-import Table from './Table';
-import UserCard from './UserCard';
 import M from 'materialize-css';
 
+import TwitterChart from './twitter/TwitterChart';
+import TwitterTable from './twitter/TwitterTable';
+import TwitterUserCard from './twitter/TwitterUserCard';
+import YoutubeChart from './youtube/YoutubeChart';
+import YoutubeTable from './youtube/YoutubeTable';
+import YoutubeUserCard from './youtube/YoutubeUserCard';
 import {
 	setLoading,
 	addAccount,
 	setFollow,
 	addTweets,
 	addMessage,
+	clearTwitter,
 } from '../actions/twitterActions';
 
-import { addYoutubeAccount } from '../actions/youtubeActions';
+import {
+	addYoutubeAccount,
+	clearYoutube,
+	setYoutubeFollow,
+} from '../actions/youtubeActions';
 
 class SearchUser extends Component {
 	state = {
 		//TODO remove default values
 		username: 'geekyranjit',
-		catagory: 'twitter',
+		catagory: 'youtube',
 	};
 
 	componentDidMount() {
@@ -32,8 +39,16 @@ class SearchUser extends Component {
 		this.props.setFollow(this.props.user, account, targetName);
 	};
 
+	handleYoutubeFollow = (targetName, account) => {
+		this.props.setYoutubeFollow(this.props.user, account, targetName);
+	};
+
 	handleSearch = event => {
 		event.preventDefault();
+
+		// TODO clear the previos search results
+		this.props.clearTwitter();
+		this.props.clearYoutube();
 
 		if (this.state.username.length > 0) {
 			if (this.state.catagory === 'twitter') {
@@ -43,11 +58,7 @@ class SearchUser extends Component {
 				//Do Insta stuff
 				this.props.addMessage('Youtube trails is coming soon...');
 			} else if (this.state.catagory === 'youtube') {
-				//Do Youtube stuff
-				console.log('in component selected YT');
-
-				this.props.addYoutubeAccount(this.state.username);
-				// this.props.addMessage('Youtube trails is coming soon...');
+				this.props.addYoutubeAccount(this.props.user, this.state.username);
 			} else {
 				this.props.addMessage('Please select a valid social media');
 			}
@@ -66,7 +77,16 @@ class SearchUser extends Component {
 
 	render() {
 		const { username, catagory } = this.state;
-		const { account, isFollowing, tweets, message, isLoading } = this.props;
+		const {
+			twitterAccount,
+			isFollowing,
+			tweets,
+			message,
+			isLoading,
+			youtubeAccount,
+			youtubeItems,
+			youtubeFollow
+		} = this.props;
 
 		return (
 			<div className="row">
@@ -111,17 +131,30 @@ class SearchUser extends Component {
 							<p className="error">{message}</p>
 						</form>
 					</div>
-					{account && (
-						<UserCard
-							account={account}
+					{twitterAccount && (
+						<TwitterUserCard
+							account={twitterAccount}
 							handleFollow={this.handleFollow}
 							isFollowing={isFollowing}
 						/>
 					)}
-					{tweets && account && (
+					{tweets && twitterAccount && (
 						<>
-							<Chart tweets={tweets} account={account} />
-							<Table tableData={tweets} account={account} />
+							<TwitterChart tweets={tweets} account={twitterAccount} />
+							<TwitterTable tableData={tweets} account={twitterAccount} />
+						</>
+					)}
+					{youtubeAccount && (
+						<YoutubeUserCard
+							account={youtubeAccount}
+							handleFollow={this.handleYoutubeFollow}
+							isFollowing={youtubeFollow}
+						/>
+					)}
+					{youtubeAccount && youtubeItems && (
+						<>
+							<YoutubeChart items={youtubeItems} account={youtubeAccount} />
+							<YoutubeTable account={youtubeAccount} />
 						</>
 					)}
 					{isLoading ? <p>Loading...</p> : <></>}
@@ -131,14 +164,20 @@ class SearchUser extends Component {
 	}
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ currentUser, twitter, youtube }) => {
 	return {
-		user: state.currentUser.user && state.currentUser.user.user,
-		account: state.twitter.account,
-		isFollowing: state.twitter.isFollowing,
-		tweets: state.twitter.tweets,
-		message: state.twitter.message,
-		isLoading: state.twitter.setLoading,
+		user: currentUser.user && currentUser.user.user,
+		//twitter state
+		twitterAccount: twitter.account,
+		isFollowing: twitter.isFollowing,
+		tweets: twitter.tweets,
+		//youtube state
+		youtubeAccount: youtube.account,
+		youtubeItems: youtube.videos,
+		youtubeFollow: youtube.isFollowing,
+		//common state
+		isLoading: twitter.isLoading || youtube.isLoading,
+		message: twitter.message || youtube.message,
 	};
 };
 
@@ -158,6 +197,9 @@ export default connect(
 		setFollow,
 		addTweets,
 		addMessage,
+		clearTwitter,
 		addYoutubeAccount,
+		clearYoutube,
+		setYoutubeFollow,
 	}
 )(SearchUser);

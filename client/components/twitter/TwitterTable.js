@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Table extends Component {
+class TwitterTable extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -41,4 +41,4 @@ class Table extends Component {
 	}
 }
 
-export default Table;
+export default TwitterTable;

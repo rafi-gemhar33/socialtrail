@@ -5,6 +5,7 @@ import {
 	SET_LOADING,
 	SET_FOLLOW,
 	TWITTER_ERROR,
+	TWITTER_CLEAR,
 	ADD_FOLLOWING_ACCOUNTS,
 } from './types';
 
@@ -88,7 +89,7 @@ export const setFollow = (
 ) => async dispatch => {
 	try {
 		const method = targetName === 'follow' ? 'POST' : 'DELETE';
-		const url = 'http://localhost:3000/api/v1//users/twitter/follow';
+		const url = 'http://localhost:3000/api/v1/users/twitter/follow';
 		const token = localStorage.getItem('jwt') || '';
 		const res = await fetch(`${url}`, {
 			method: method,
@@ -118,13 +119,16 @@ export const setFollow = (
 	}
 };
 
-export const setFollowingAccounts = id => async dispatch => {
+export const setfollowingAccounts = id => async dispatch => {
 	try {
 		const res = await fetch(`http://localhost:3000/api/v1/users/${id}`);
 		const data = await res.json();
 
 		if (data.success) {
-			const accounts = data.user.followingAccounts;
+			const accounts = {
+				twitter: data.user.followingAccounts,
+				youtube: data.user.followingYoutubeAccounts,
+			};
 			dispatch({
 				type: ADD_FOLLOWING_ACCOUNTS,
 				payload: accounts,
@@ -136,6 +140,12 @@ export const setFollowingAccounts = id => async dispatch => {
 			payload: error,
 		});
 	}
+};
+
+export const clearTwitter = () => {
+	return {
+		type: TWITTER_CLEAR,
+	};
 };
 
 export const setLoading = () => {

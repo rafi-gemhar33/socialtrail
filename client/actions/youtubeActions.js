@@ -1,16 +1,17 @@
 import {
 	ADD_MESSAGE,
 	SET_LOADING,
-	SET_FOLLOW,
-	TWITTER_ERROR,
-	ADD_FOLLOWING_ACCOUNTS,
+
+	ADD_YT_DATA,
 	ADD_YT_ACCOUNT,
+	SET_YT_FOLLOW,
+	YT_CLEAR,
+	YT_ERROR,
 } from './types';
 
-export const addYoutubeAccount = username => async dispatch => {
+export const addYoutubeAccount = (loggedUser, username) => async dispatch => {
 	try {
-		// setLoading();
-		console.log('in Action selected YT');
+		setLoading();
 
 		const channelRes = await fetch(
 			`http://localhost:3000/api/v1/youtube/channel/${username}`
@@ -18,19 +19,27 @@ export const addYoutubeAccount = username => async dispatch => {
 		const channelData = await channelRes.json();
 
 		if (channelData.success && channelData.account) {
-			// console.log(channelData.account.id, "!!!!!!!!!!", channelData.account);
+			const {account} = channelData
+			const isFollowing = !!(
+				loggedUser && loggedUser.followingAccounts.includes(account._id)
+			);
+			dispatch({
+				type: ADD_YT_ACCOUNT,
+				payload: {account, isFollowing},
+			});
 
 			const searchlRes = await fetch(
-				`http://localhost:3000/api/v1/youtube/searchList/${channelData.account.id}`
+				`http://localhost:3000/api/v1/youtube/searchList/${channelData.account.id_str}`
 			);
 
 			const searchlData = await searchlRes.json();
-			console.log(searchlData, '!!!!!!!!!!');
 
-			dispatch({
-				type: ADD_YT_ACCOUNT,
-				payload: { searchlData },
-			});
+			if (searchlData.success && searchlData.items) {
+				dispatch({
+					type: ADD_YT_DATA,
+					payload: searchlData.items,
+				});
+			}
 		} else {
 			dispatch({
 				type: ADD_MESSAGE,
@@ -39,71 +48,57 @@ export const addYoutubeAccount = username => async dispatch => {
 		}
 	} catch (error) {
 		dispatch({
-			type: TWITTER_ERROR,
+			type: YT_ERROR,
 			payload: error,
 		});
 	}
 };
 
-// export const setFollow = (
-// 	loggedUser,
-// 	account,
-// 	targetName
-// ) => async dispatch => {
-// 	try {
-// 		const method = targetName === 'follow' ? 'POST' : 'DELETE';
-// 		const url = 'http://localhost:3000/api/v1//users/twitter/follow';
-// 		const token = localStorage.getItem('jwt') || '';
-// 		const res = await fetch(`${url}`, {
-// 			method: method,
-// 			headers: {
-// 				'Content-Type': 'application/json',
-// 				Accept: 'application/json',
-// 				Authorization: token,
-// 			},
-// 			body: JSON.stringify({
-// 				user: loggedUser,
-// 				account: account,
-// 			}),
-// 		});
+export const setLoading = () => {
+	return {
+		type: SET_LOADING,
+	};
+};
 
-// 		const data = await res.json();
-// 		dispatch({ type: 'UPDATE_USER_SUCCESS', data: data });
-// 		const isFollowing = data.user.followingAccounts.includes(account._id);
-// 		dispatch({
-// 			type: SET_FOLLOW,
-// 			payload: isFollowing,
-// 		});
-// 	} catch (error) {
-// 		dispatch({
-// 			type: TWITTER_ERROR,
-// 			payload: error,
-// 		});
-// 	}
-// };
+export const setYoutubeFollow = (
+	loggedUser,
+	account,
+	targetName
+) => async dispatch => {
+	try {
+		const method = targetName === 'follow' ? 'POST' : 'DELETE';
+		const url = 'http://localhost:3000/api/v1/users/youtube/follow';
+		const token = localStorage.getItem('jwt') || '';
+		const res = await fetch(`${url}`, {
+			method: method,
+			headers: {
+				'Content-Type': 'application/json',
+				Accept: 'application/json',
+				Authorization: token,
+			},
+			body: JSON.stringify({
+				user: loggedUser,
+				account: account,
+			}),
+		});
 
-// export const setFollowingAccounts = id => async dispatch => {
-// 	try {
-// 		const res = await fetch(`http://localhost:3000/api/v1/users/${id}`);
-// 		const data = await res.json();
+		const data = await res.json();
+		dispatch({ type: 'UPDATE_USER_SUCCESS', data: data });
+		const isFollowing = data.user.followingYoutubeAccounts.includes(account._id);
+		dispatch({
+			type: SET_YT_FOLLOW,
+			payload: isFollowing,
+		});
+	} catch (error) {
+		dispatch({
+			type: YT_ERROR,
+			payload: error,
+		});
+	}
+};
 
-// 		if (data.success) {
-// 			const accounts = data.user.followingAccounts;
-// 			dispatch({
-// 				type: ADD_FOLLOWING_ACCOUNTS,
-// 				payload: accounts,
-// 			});
-// 		}
-// 	} catch (error) {
-// 		dispatch({
-// 			type: TWITTER_ERROR,
-// 			payload: error,
-// 		});
-// 	}
-// };
-
-// export const setLoading = () => {
-// 	return {
-// 		type: SET_LOADING,
-// 	};
-// };
+export const clearYoutube = () => {
+	return {
+		type: YT_CLEAR,
+	};
+};

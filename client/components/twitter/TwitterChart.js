@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2';
 
-class Chart extends Component {
+class TwitterChart extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -41,7 +41,7 @@ class Chart extends Component {
 		let labels = this.props.account.friends_count.map((_, i) => {
 			date.setDate(date.getDate() + i);
 			return date.toDateString().slice(4, 10);
-		})
+		});
 		// this.props.tweets.map(a => a[0].slice(0, 6));
 
 		let data = this.props.account[key];
@@ -61,112 +61,66 @@ class Chart extends Component {
 		return chartData;
 	};
 
+	getOptions = text => {
+		return {
+			title: {
+				display: this.props.displayTitle,
+				text: text,
+				fontSize: 16,
+			},
+			legend: {
+				display: this.props.displayLegend,
+				position: this.props.legendPosition,
+			},
+			options: {
+				plugins: {
+					filler: {
+						propagate: true,
+					},
+				},
+			},
+		};
+	};
+
 	render() {
 		return (
 			<div className="chart-box">
 				<div className="chart">
 					<Line
 						data={this.setTweetData('avgLikes')}
-						options={{
-							title: {
-								display: this.props.displayTitle,
-								text: 'Average likes per day',
-								fontSize: 16,
-							},
-							legend: {
-								display: this.props.displayLegend,
-								position: this.props.legendPosition,
-							},
-							options: {
-								plugins: {
-									filler: {
-										propagate: true,
-									},
-								},
-							},
-						}}
+						options={this.getOptions('Average likes per day')}
 					/>
 				</div>
 				<div className="chart">
 					<Line
 						data={this.setTweetData('avgRT')}
-						options={{
-							title: {
-								display: this.props.displayTitle,
-								text: 'Average RT per day',
-								fontSize: 16,
-							},
-							legend: {
-								display: this.props.displayLegend,
-								position: this.props.legendPosition,
-							},
-						}}
+						options={this.getOptions('Average RT per day')}
 					/>
 				</div>
 				<div className="chart">
 					<Line
 						data={this.setTweetData('avgEngagement')}
-						options={{
-							title: {
-								display: this.props.displayTitle,
-								text: 'Average Engagement per day',
-								fontSize: 16,
-							},
-							legend: {
-								display: this.props.displayLegend,
-								position: this.props.legendPosition,
-							},
-						}}
+						options={this.getOptions('Average Engagement per day')}
 					/>
 				</div>
 
 				<div className="chart">
 					<Line
 						data={this.setTweetData('tweets')}
-						options={{
-							title: {
-								display: this.props.displayTitle,
-								text: 'tweets per day',
-								fontSize: 16,
-							},
-							legend: {
-								display: this.props.displayLegend,
-								position: this.props.legendPosition,
-							},
-						}}
+						options={this.getOptions('tweets per day')}
 					/>
 				</div>
 
 				<div className="chart">
 					<Line
 						data={this.setUserData('followers_count')}
-						options={{
-							title: {
-								display: this.props.displayTitle,
-								text: 'Followers changes per day',
-								fontSize: 16,
-							},
-							legend: {
-								display: this.props.displayLegend,
-								position: this.props.legendPosition,
-							},
-						}}
+						options={this.getOptions('Followers changes per day')}
 					/>
 				</div>
 				<div className="chart">
 					<Line
 						data={this.setUserData('friends_count')}
-						options={{
-							title: {
-								display: this.props.displayTitle,
-								text: 'following change per day',
-								fontSize: 16,
-							},
-							legend: {
-								display: this.props.displayLegend,
-								position: this.props.legendPosition,
-							},
-						}}
+						options={this.getOptions('following change per day')}
 					/>
 				</div>
 			</div>
@@ -174,4 +128,4 @@ class Chart extends Component {
 	}
 }
 
-export default Chart;
+export default TwitterChart;

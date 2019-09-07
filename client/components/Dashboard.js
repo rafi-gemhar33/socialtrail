@@ -1,14 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import UserCard from './UserCard';
+import TwitterUserCard from './twitter/TwitterUserCard';
+import YoutubeUserCard from './youtube/YoutubeUserCard';
 
 import {
 	setFollow,
-	setFollowingAccounts,
+	setfollowingAccounts,
 	addAccount,
 	addTweets,
+	clearTwitter,
 } from '../actions/twitterActions';
+
+import { setYoutubeFollow, clearYoutube, addYoutubeAccount } from '../actions/youtubeActions';
 
 class Dashboard extends React.Component {
 	state = {
@@ -19,20 +23,35 @@ class Dashboard extends React.Component {
 	}
 	populateFollowers() {
 		if (this.props.user) {
-			this.props.setFollowingAccounts(this.props.user._id);
+			this.props.setfollowingAccounts(this.props.user._id);
 		}
 	}
 	handleFollow = async (targetName, account) => {
 		await this.props.setFollow(this.props.user, account, targetName);
 		this.populateFollowers();
 	};
+	handleYoutubeFollow = async (targetName, account) => {
+		await this.props.setYoutubeFollow(this.props.user, account, targetName);
+		this.populateFollowers();
+	};
 	showAccount(account) {
+		this.props.clearYoutube();
+		this.props.clearTwitter();
+
 		this.props.addAccount(this.props.user, account.screen_name);
 		this.props.addTweets(account.screen_name);
 		this.setState({ redirect: true });
 	}
+
+	showYoutubeAccount(account) {
+		this.props.clearYoutube();
+		this.props.clearTwitter();
+
+		this.props.addYoutubeAccount(this.props.user, account.searchName);
+		this.setState({ redirect: true });
+	}
 	render() {
-		const { accounts } = this.props;
+		const { accounts, youtubeAccount } = this.props;
 
 		if (this.state.redirect) {
 			return (
@@ -48,11 +67,13 @@ class Dashboard extends React.Component {
 				<div className="row">
 					<div className="col s8 offset-s2">
 						<div className="form-container row">
+							<h3>Twitter</h3>
+
 							{accounts &&
 								accounts.map(account => {
 									return (
 										<div className="custom-card">
-											<UserCard
+											<TwitterUserCard
 												account={account}
 												handleFollow={this.handleFollow}
 												isFollowing={true}
@@ -67,9 +88,33 @@ class Dashboard extends React.Component {
 										</div>
 									);
 								})}
-							{accounts && accounts.length < 1 && (
-								<p>Currently you are not following any accounts</p>
-							)}
+							<h3>Youtube</h3>
+
+							{youtubeAccount &&
+								youtubeAccount.map(account => {
+									return (
+										<div className="custom-card">
+											<YoutubeUserCard
+												account={account}
+												handleFollow={this.handleYoutubeFollow}
+												isFollowing={true}
+											/>
+
+											<button
+												className="btn btn-light btn-block btn-large full-btn"
+												onClick={() => this.showYoutubeAccount(account)}
+											>
+												Show Account
+											</button>
+										</div>
+									);
+								})}
+
+							{accounts &&
+								youtubeAccount &&
+								accounts.length + youtubeAccount.length < 1 && (
+									<p>Currently you are not following any accounts</p>
+								)}
 						</div>
 					</div>
 				</div>
@@ -82,10 +127,20 @@ function mapStateToProps(state) {
 	return {
 		user: state.currentUser.user && state.currentUser.user.user,
 		accounts: state.twitter.followingAccounts,
+		youtubeAccount: state.twitter.youtubeAccounts,
 	};
 }
 
 export default connect(
 	mapStateToProps,
-	{ setFollow, setFollowingAccounts, addAccount, addTweets }
+	{
+		setFollow,
+		setfollowingAccounts,
+		addAccount,
+		addTweets,
+		setYoutubeFollow,
+		clearYoutube,
+		clearTwitter,
+		addYoutubeAccount,
+	}
 )(Dashboard);

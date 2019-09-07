@@ -1,26 +1,25 @@
-const TwiterAccount = require("../models/TwitterAccount");
+const TwiterAccount = require('../models/TwitterAccount');
 
-const Twitter = require("twitter");
+const Twitter = require('twitter');
 
 const client = new Twitter({
 	consumer_key: process.env.TWITTER_CONSUMER_KEY,
 	consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
 	access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-	access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
+	access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
 module.exports = {
-	updateAccount: (req, res) => {
+	updateTwitterAccount: (req, res) => {
 		TwiterAccount.find({}, (err, accounts) => {
 			if (err) {
 				return res.status(500).json({
 					error: err,
 					success: false,
-					massege: "Server error",
-					account: {}
+					massege: 'Server error',
+					account: {},
 				});
 			} else if (accounts) {
-
 				var i = 0; //  set your counter to 1
 
 				function myLoop() {
@@ -29,9 +28,9 @@ module.exports = {
 						//Updating the count every day
 
 						const params = {
-							screen_name: accounts[i].screen_name || ""
+							screen_name: accounts[i].screen_name || '',
 						};
-						client.get("users/show.json", params, function(
+						client.get('users/show.json', params, function(
 							error,
 							accountDetails,
 							response
@@ -42,7 +41,7 @@ module.exports = {
 									followers_count,
 									friends_count,
 									favourites_count,
-									statuses_count
+									statuses_count,
 								} = accountDetails;
 
 								TwiterAccount.updateOne(
@@ -50,34 +49,34 @@ module.exports = {
 									{
 										$push: {
 											followers_count: followers_count,
-                      friends_count: friends_count,
-                      favourites_count: favourites_count,
-                      statuses_count: statuses_count
-										}
+											friends_count: friends_count,
+											favourites_count: favourites_count,
+											statuses_count: statuses_count,
+										},
 									},
 									(err, updatedAccount) => {
 										if (err) {
 											console.log(
-												"error ***********************",
+												'error ***********************',
 												err,
 												updatedAccount
 											);
 											return res
 												.status(500)
-												.json({ success: false, massege: "Server error" });
+												.json({ success: false, massege: 'Server error' });
 										} else if (updatedAccount) {
 											// console.log(
-                      //   updatedAccount,
-                      //   updatedAccount,
+											//   updatedAccount,
+											//   updatedAccount,
 											// 	"###Updated###"
 											// );
 										}
 									}
 								);
 							} else {
-								console.log("error", tweets);
+								console.log('error', tweets);
 								res.json({
-									success: false
+									success: false,
 								});
 							}
 						});
@@ -91,5 +90,5 @@ module.exports = {
 				myLoop();
 			}
 		});
-	}
+	},
 };

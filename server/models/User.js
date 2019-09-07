@@ -28,6 +28,12 @@ const UserSchema = new Schema({
 			type: Schema.Types.ObjectId,
 			ref: "TwitterAccount",
 		}
+	],
+	followingYoutubeAccounts: [
+		{
+			type: Schema.Types.ObjectId,
+			ref: "YoutubeAccount",
+		}
 	]
 
 }, { timestamps: true });

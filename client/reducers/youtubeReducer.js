@@ -1,15 +1,19 @@
 import {
-	ADD_MESSAGE,
-	SET_LOADING,
-	SET_FOLLOW,
-	TWITTER_ERROR,
-	ADD_FOLLOWING_ACCOUNTS,
+	// ADD_MESSAGE,
+	// SET_LOADING,
+	// SET_FOLLOW,
+	// TWITTER_ERROR,
+	// ADD_FOLLOWING_ACCOUNTS,
+	ADD_YT_DATA,
 	ADD_YT_ACCOUNT,
+	YT_CLEAR,
+	SET_YT_FOLLOW,
+	YT_ERROR,
 } from '../actions/types';
 
 const initialState = {
 	message: '',
-	tweets: null,
+	videos: null,
 	isLoading: false,
 	account: null,
 	isFollowing: false,
@@ -17,10 +21,49 @@ const initialState = {
 	followingAccounts: [],
 };
 
-export default (state = {initialState}, action) => {
+export default (state = initialState, action) => {
 	switch (action.type) {
+		case ADD_YT_ACCOUNT:
+			return {
+				...state,
+				account: action.payload.account,
+				isFollowing: action.payload.isFollowing,
+				isLoading: false,
+			};
+		case ADD_YT_DATA:
+			return {
+				...state,
+				videos: action.payload,
+				isLoading: false,
+			};
+
+		case YT_CLEAR:
+			return {
+				message: '',
+				videos: null,
+				isLoading: false,
+				account: null,
+				isFollowing: false,
+				error: '',
+				followingAccounts: [],
+			};
+
+		case SET_YT_FOLLOW:
+			return {
+				...state,
+				isFollowing: action.payload,
+				loading: false,
+			};
+
+		case YT_ERROR:
+			console.log(action.payload);
+			return {
+				...state,
+				error: action.payload,
+				loading: false,
+			};
+
 		default:
-			// console.log('in Reducer selected YT');
 			return state;
 	}
 };

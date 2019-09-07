@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-class UserCard extends Component {
-	
+class YoutubeUserCard extends Component {
 	handleFollow = ev => {
 		if (this.props.currentUser) {
 			this.props.handleFollow(ev.target.name, this.props.account);
@@ -21,24 +20,21 @@ class UserCard extends Component {
 							<img
 								className="banner"
 								src={
-									this.props.account.profile_banner_url ||
+									this.props.account.bannerImageUrl ||
 									'https://images.unsplash.com/photo-1488490579377-8ea9a560f5cd?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=500'
 								}
 							/>
 							<div className="dp-box">
 								<img
 									className="dp circle responsive-img"
-									src={this.props.account.profile_image_url.replace(
-										'normal',
-										'400x400'
-									)}
+									src={this.props.account.profileImageUrl}
 								/>
 							</div>
 						</div>
 
 						<div className="card-content user-content">
 							<span className="card-title activator grey-text text-darken-4">
-								{this.props.account.name}
+								{this.props.account.title}
 								{!this.props.isFollowing ? (
 									<button
 										className="btn right"
@@ -57,7 +53,11 @@ class UserCard extends Component {
 									</button>
 								)}
 							</span>
-							<p>{this.props.account.description}</p>
+							<p>
+								{this.props.account.description.length < 300
+									? this.props.account.description
+									: `${this.props.account.description.slice(0, 300)}...`}
+							</p>
 						</div>
 					</div>
 				</div>
@@ -72,4 +72,4 @@ const mapStateToProps = state => {
 	};
 };
 
-export default connect(mapStateToProps)(withRouter(UserCard));
+export default connect(mapStateToProps)(withRouter(YoutubeUserCard));

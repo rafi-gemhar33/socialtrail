@@ -18,7 +18,7 @@ User Model:
       min: 6,
       max: 20
     },
-    FollowingAccounts: [{
+    followingAccounts: [{
       type: Object,
       refpath: [TwitterAccount, InstaAccount],
       max: 5
@@ -64,28 +64,52 @@ TwitterAccount Model:
       type: String,
     },
 --------------------------------------------------------------------------------------------------------
-Tweet Model:
 
-    date: {
+YoutubeAccountSchema :
+
+	{
+		id_str: {
+			type: String,
+			unique: true,
+			require: true,
+		},
+		title: {
+			type: String,
+			unique: true,
+			require: true,
+    },
+    searchName : {
       type: String,
+      require: true,
     },
-    tweetId: {
-      type: String,
-      unique: true,
-      require: true
-    },
-    text: {
-      type: String,
-      unique: true,
-      require: true
-    },
-    truncated: {
-      type: Boolean,
-    },
-    Retweets: {
-      type: number,
-    },
-    likes: {
-      type: number,
-    },
+		description: {
+			type: String,
+		},
+		location: {
+			type: String,
+		},
+		viewCount: [
+			{
+				type: Number,
+			},
+		],
+		subscriberCount: [
+			{
+				type: Number,
+			},
+		],
+		videoCount: [
+			{
+				type: Number,
+			},
+		],
+		bannerImageUrl: {
+			type: String,
+		},
+		profileImageUrl: {
+			type: String,
+		},
+	},
+	{ timestamps: true }
+
 --------------------------------------------------------------------------------------------------------
