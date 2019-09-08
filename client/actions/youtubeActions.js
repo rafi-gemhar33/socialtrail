@@ -21,7 +21,7 @@ export const addYoutubeAccount = (loggedUser, username) => async dispatch => {
 		if (channelData.success && channelData.account) {
 			const {account} = channelData
 			const isFollowing = !!(
-				loggedUser && loggedUser.followingAccounts.includes(account._id)
+				loggedUser && loggedUser.followingYoutubeAccounts.includes(account._id)
 			);
 			dispatch({
 				type: ADD_YT_ACCOUNT,

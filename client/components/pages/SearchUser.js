@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import M from 'materialize-css';
 
-import TwitterChart from './twitter/TwitterChart';
-import TwitterTable from './twitter/TwitterTable';
-import TwitterUserCard from './twitter/TwitterUserCard';
-import YoutubeChart from './youtube/YoutubeChart';
-import YoutubeTable from './youtube/YoutubeTable';
-import YoutubeUserCard from './youtube/YoutubeUserCard';
+import TwitterChart from '../twitter/TwitterChart';
+import TwitterTable from '../twitter/TwitterTable';
+import TwitterUserCard from '../twitter/TwitterUserCard';
+import YoutubeChart from '../youtube/YoutubeChart';
+import YoutubeTable from '../youtube/YoutubeTable';
+import YoutubeUserCard from '../youtube/YoutubeUserCard';
 import {
 	setLoading,
 	addAccount,
@@ -15,13 +15,13 @@ import {
 	addTweets,
 	addMessage,
 	clearTwitter,
-} from '../actions/twitterActions';
+} from '../../actions/twitterActions';
 
 import {
 	addYoutubeAccount,
 	clearYoutube,
 	setYoutubeFollow,
-} from '../actions/youtubeActions';
+} from '../../actions/youtubeActions';
 
 class SearchUser extends Component {
 	state = {

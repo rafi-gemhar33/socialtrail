@@ -28,7 +28,6 @@ module.exports = {
 						.then(data => data.json())
 						.then(account => {
 							if (!account.error && account.items[0]) {
-								//TODO create a model and send the responsez
 
 								const {
 									id,

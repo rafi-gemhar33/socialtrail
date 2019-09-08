@@ -78,6 +78,12 @@ new CronJob('1 0 0 * * *', function() {
   updateDBwithCJ.updateTwitterAccount();
 }, null, true, 'Asia/Kolkata');
 
+app.use(function(req, res, next) {
+  console.log("testing youtube cronjob")
+  updateDBwithCJ.updateYoutubeAccount();
+  next()
+})
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

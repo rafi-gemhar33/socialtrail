@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import TwitterUserCard from './twitter/TwitterUserCard';
-import YoutubeUserCard from './youtube/YoutubeUserCard';
+import TwitterUserCard from '../twitter/TwitterUserCard';
+import YoutubeUserCard from '../youtube/YoutubeUserCard';
 
 import {
 	setFollow,
@@ -10,9 +10,9 @@ import {
 	addAccount,
 	addTweets,
 	clearTwitter,
-} from '../actions/twitterActions';
+} from '../../actions/twitterActions';
 
-import { setYoutubeFollow, clearYoutube, addYoutubeAccount } from '../actions/youtubeActions';
+import { setYoutubeFollow, clearYoutube, addYoutubeAccount } from '../../actions/youtubeActions';
 
 class Dashboard extends React.Component {
 	state = {
