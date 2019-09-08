@@ -8,9 +8,9 @@ class Login extends Component {
 	state = {
 		user: {
 			email: '',
-			password: ''
+			password: '',
 		},
-		error: ''
+		error: '',
 	};
 
 	handleChange = e => {
@@ -18,8 +18,8 @@ class Login extends Component {
 		this.setState({
 			user: {
 				...this.state.user,
-				[name]: value
-			}
+				[name]: value,
+			},
 		});
 	};
 
@@ -33,9 +33,9 @@ class Login extends Component {
 			fetch(`${url}users/login`, {
 				method: 'POST',
 				headers: {
-					'Content-Type': 'application/json'
+					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(this.state.user)
+				body: JSON.stringify(this.state.user),
 			})
 				.then(res => res.json())
 				.then(data => {

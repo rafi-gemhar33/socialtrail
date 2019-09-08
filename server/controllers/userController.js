@@ -6,6 +6,7 @@ module.exports = {
 	getUser: (req, res) => {
 		User.findOne({ _id: req.params.id })
 			.populate('followingAccounts')
+			.populate('followingYoutubeAccounts')
 			.exec((err, user) => {
 				if (err) {
 					return res
@@ -182,5 +183,39 @@ module.exports = {
 				}
 			}
 		);
-	}
+	},
+
+	followYoutube: (req, res) => {
+		User.findByIdAndUpdate(
+			req.body.user._id,
+			{ $push: { followingYoutubeAccounts: req.body.account } },
+			{ new: true },
+			(err, updatedUser) => {
+				if (err) {
+					return res
+						.status(500)
+						.json({ error: err, success: false, message: 'Server error' });
+				} else {
+					res.status(200).json({ success: true, user: updatedUser });
+				}
+			}
+		);
+	},
+
+	unFollowYoutube: (req, res) => {
+		User.findByIdAndUpdate(
+			req.body.user._id,
+			{ $pull: { followingYoutubeAccounts: req.body.account._id } },
+			{ new: true },
+			(err, updatedUser) => {
+				if (err) {
+					return res
+						.status(500)
+						.json({ error: err, success: false, message: 'Server error' });
+				} else {
+					res.status(200).json({ success: true, user: updatedUser });
+				}
+			}
+		);
+	},
 };

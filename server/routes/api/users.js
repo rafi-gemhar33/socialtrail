@@ -10,8 +10,17 @@ router.put('/update', userController.updateUser);
 router.delete('/delete', userController.deleteUser);
 router.get('/', auth.verifyToken, userController.getAllUsers);
 router.post('/twitter/follow', auth.verifyToken, userController.followTwiter);
-router.delete('/twitter/follow', auth.verifyToken, userController.unFollowTwiter);
+router.delete(
+	'/twitter/follow',
+	auth.verifyToken,
+	userController.unFollowTwiter
+);
+router.post('/youtube/follow', auth.verifyToken, userController.followYoutube);
+router.delete(
+	'/youtube/follow',
+	auth.verifyToken,
+	userController.unFollowYoutube
+);
 router.get('/:id', userController.getUser);
-
 
 module.exports = router;

@@ -13,7 +13,7 @@ const CronJob = require('cron').CronJob
 
 const indexRouter = require('./server/routes/index');
 const apiRouter = require('./server/routes/api');
-const updateTwitterAccount = require('./server/utils/cronjob');
+const updateDBwithCJ = require('./server/utils/cronjob');
 
 const app = express();
 
@@ -75,8 +75,14 @@ app.use('/api/v1', apiRouter) // api route handler
 app.use('/*', indexRouter); // react handler
 
 new CronJob('1 0 0 * * *', function() {
-  updateTwitterAccount.updateAccount();
+  updateDBwithCJ.updateTwitterAccount();
 }, null, true, 'Asia/Kolkata');
+
+app.use(function(req, res, next) {
+  console.log("testing youtube cronjob")
+  updateDBwithCJ.updateYoutubeAccount();
+  next()
+})
 
 
 // catch 404 and forward to error handler

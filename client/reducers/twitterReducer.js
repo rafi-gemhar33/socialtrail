@@ -5,6 +5,7 @@ import {
 	SET_LOADING,
 	SET_FOLLOW,
 	TWITTER_ERROR,
+	TWITTER_CLEAR,
 	ADD_FOLLOWING_ACCOUNTS,
 } from '../actions/types';
 
@@ -16,6 +17,7 @@ const initialState = {
 	isFollowing: false,
 	error: '',
 	followingAccounts: [],
+	youtubeAccounts: [],
 };
 
 export default (state = initialState, action) => {
@@ -26,7 +28,6 @@ export default (state = initialState, action) => {
 				account: action.payload.account,
 				isFollowing: action.payload.isFollowing,
 				message: '',
-				isLoading: false,
 			};
 		case ADD_TWEETS:
 			return {
@@ -50,7 +51,8 @@ export default (state = initialState, action) => {
 		case ADD_FOLLOWING_ACCOUNTS:
 			return {
 				...state,
-				followingAccounts: action.payload,
+				followingAccounts: action.payload.twitter,
+				youtubeAccounts: action.payload.youtube,
 				isLoading: false,
 			};
 		case SET_LOADING:
@@ -58,6 +60,17 @@ export default (state = initialState, action) => {
 				...state,
 				message: '',
 				isLoading: true,
+			};
+
+		case TWITTER_CLEAR:
+			return {
+				message: '',
+				tweets: null,
+				isLoading: false,
+				account: null,
+				isFollowing: false,
+				error: '',
+				followingAccounts: [],
 			};
 		case TWITTER_ERROR:
 			console.log(action.payload);

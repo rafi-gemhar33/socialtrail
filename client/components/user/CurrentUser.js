@@ -3,24 +3,22 @@ import { connect } from 'react-redux';
 
 class CurrentUser extends React.Component {
 	render() {
-		const { user } = this.props.user;
+		const  user  = this.props.user;
 		return (
 			<div className="avatar-box">
-				{user && user.user ? (
-						<p className="avatar">
-							{user.user.userName ? user.user.userName[0] : ''}
-						</p>
-
-				) : null}
+				{user && (
+					<p className="avatar">
+						{user.userName ? user.userName[0] : ''}
+					</p>
+				) }
 			</div>
 		);
 	}
 }
 
 function mapStateToProps(state) {
-	// console.log(state, "nav map state");
 	return {
-		user: state.currentUser
+		user: state.currentUser.user && state.currentUser.user.user
 	};
 }
 

@@ -7,9 +7,9 @@ import { getCurrentUser, noToken } from '../actions';
 
 import Login from '../components/user/Login';
 import SignUp from '../components/user/SignUp';
-import HomePage from '../components/HomePage';
+import HomePage from '../components/pages/HomePage';
 import Navbar from '../components/layout/Navbar';
-import Dashboard from '../components/Dashboard';
+import Dashboard from '../components/pages/Dashboard';
 
 class App extends Component {
   state = {

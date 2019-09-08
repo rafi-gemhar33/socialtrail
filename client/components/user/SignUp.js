@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import validateEmail from "../../utils/validateEmail";
-const url = "http://localhost:3000/api/v1/";
+import validateEmail from '../../utils/validateEmail';
+const url = 'http://localhost:3000/api/v1/';
 
 class SignUp extends Component {
 	state = {
 		user: {
-			userName: "",
-			email: "",
-			password: "",
-			confirmPassword: ""
+			userName: '',
+			email: '',
+			password: '',
+			confirmPassword: '',
 		},
-		error: ""
+		error: '',
 	};
 
 	handleChange = e => {
@@ -20,8 +20,8 @@ class SignUp extends Component {
 		this.setState({
 			user: {
 				...this.state.user,
-				[name]: value
-			}
+				[name]: value,
+			},
 		});
 	};
 
@@ -31,7 +31,7 @@ class SignUp extends Component {
 
 		const isValidEmail = validateEmail(email);
 
-		console.log(isValidEmail, "check mail demo...");
+		console.log(isValidEmail, 'check mail demo...');
 
 		if (
 			userName &&
@@ -42,33 +42,33 @@ class SignUp extends Component {
 		) {
 			if (password === confirmPassword) {
 				fetch(`${url}users/register`, {
-					method: "POST",
-					mode: "cors",
+					method: 'POST',
+					mode: 'cors',
 					headers: {
-						"Content-Type": "application/json"
+						'Content-Type': 'application/json',
 					},
-					body: JSON.stringify(this.state.user)
+					body: JSON.stringify(this.state.user),
 				})
 					.then(res => res.json())
 					.then(data => {
 						// console.log(data, "signup data");
 						if (data.success) {
-							// localStorage.setItem("jwt", data.token);
-							this.props.dispatch({ type: "USER_LOGIN_SUCCESS", data: data });
+							localStorage.setItem('jwt', data.token);
+							this.props.dispatch({ type: 'USER_LOGIN_SUCCESS', data: data });
 							this.setState({ user: {} });
-							this.props.history.push("/");
+							this.props.history.push('/');
 						}
 					})
 					.catch(function(err) {
-						console.log(err, "catch error");
+						console.log(err, 'catch error');
 						// this.setState({ error: "Wrong email Address" });
 						// setTimeout(() => this.setState({ error: "" }), 1000);
 					});
 			} else {
-				this.setState({ error: "password did not match" });
+				this.setState({ error: 'password did not match' });
 			}
 		} else {
-			this.setState({ error: "Please fill all the feilds" });
+			this.setState({ error: 'Please fill all the feilds' });
 		}
 	};
 
